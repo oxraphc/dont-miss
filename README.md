@@ -1,2 +1,2 @@
 # dont-miss
-Simple website for view prayer delta time
+Simple website to view prayer times
