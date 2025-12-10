@@ -1,5 +1,6 @@
 html, body {
     margin: 0;
+    font-family: 'Fragment Mono', monospace;
 }
 
 #main {
@@ -8,5 +9,43 @@ html, body {
     align-items: center;
     justify-content: center;
     height: 100vh;
+    width: 100vw;
+}
+
+#clock {
+    font-size: 5rem;
+    margin-bottom: 0;
+}
+
+#next-prayer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#next-prayer {
+    font-size: 2rem;
+    margin: 0;
+}
+
+#next-prayer-container p {
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+}
+
+#next-prayer-time {
+    margin-top: 2vh !important;
+}
+
+#time-progress-bar-container {
+    padding: 0 5vw;
+    width: 80vw;
+
+}
+
+#time-progress-bar-outline {
+    background-color: lightgray;
+    height: 5px;
 }
 

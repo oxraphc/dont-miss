@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prayer Time</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fragment+Mono:ital@0;1&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="main">
@@ -16,11 +19,23 @@
             <h2 id="next-prayer">Fajr</h2>
             <p id="next-prayer-time">00:00</p>
         </div>
-        <div id="time-progress-bar-container">
-            <div id="time-progress-bar-outline">
-                <div id="time=progress-bar-fill"></div>
+        <div id="progress-bar-container">
+            <div id="progress-bar">
+                <div id="markers"> 
+                    <div class="marker"></div>
+                    <div class="marker"></div>
+                    <div class="marker"></div>
+                </div>
+                <div class="bar"></div>
+                <div id="progress">
+                    <div class="bar" id="progresses-bar"></div>
+                    <div id="progresses-bar-marker"></div>
+                </div>
             </div>
-            <p id="time-progress-bar-delta">-30m</p>
+            <div id="progress-bar-label">
+                <p>-30</p>
+                <p>+30</p>
+            </div>
         </div>
     </div>
 </body>
