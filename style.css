@@ -35,17 +35,45 @@ html, body {
 }
 
 #next-prayer-time {
-    margin-top: 2vh !important;
+    margin: 0 2vh;
 }
 
-#time-progress-bar-container {
-    padding: 0 5vw;
+#progress-bar-container {
     width: 80vw;
-
 }
 
-#time-progress-bar-outline {
-    background-color: lightgray;
+#progress-bar {
+    width: inherit;
+    height: 20px;
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#markers {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    width: inherit;
+}
+
+.marker {
+    height: 20px;
+    width: 3px;
+    background-color: grey;
+}
+
+#bar {
+    width: inherit;
     height: 5px;
+    background-color: lightgrey;
 }
 
+#progress-bar-labels {
+    display: flex;
+    justify-content: space-between;
+    width: inherit;
+}
