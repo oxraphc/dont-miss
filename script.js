@@ -44,10 +44,11 @@ setInterval(() => {
 }, 1000);
 
 // 1. Update next prayer
-// TODO
 // 2. Calculate delta
+// TODO
 // 3. Update time bar
-
+// 4. Have "Next prayer" and "Current prayer" with the former ranging 1 hour before adzan 
+//    and the latter ~ hour after adzan
 
 function updateClock(now) {
     const hours = now.getHours().toString().padStart(2, '0');
@@ -71,6 +72,31 @@ function updateNextPrayer(now) {
             break;
         }
     }
+}
+
+
+function calcTimeDelta(from, to) {
+    return to - from;
+}
+
+
+function formatMinutes(minutes) {
+    if (!minutes) {
+        return '0m';
+    }
+
+    const m = minutes % 60;
+    const h = (minutes - m) / 60;
+    let s = [];
+
+    if (h > 0) {
+        s.push(`${h}h`);
+    }
+    if (m > 0) {
+        s.push(`${m}m`);
+    }
+
+    return s.join(' ');
 }
 
 
