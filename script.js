@@ -1,7 +1,10 @@
 const API_URL = "https://api.myquran.com/v3/sholat/jadwal/d6baf65e0b240ce177cf70da146c8dc8/today"
 const clockElem = document.getElementById('clock');
+const nextPrayerTimeElem = document.getElementById('next-prayer-time');
+const nextPrayerElem = document.getElementById('next-prayer');
 
-let todayTimes = [];
+let nextPrayerIndex = 0;
+const todayPrayerTimes = [];
 // 0- Fajr
 // 1- Sunrise
 // 2- Dzuhr
@@ -19,29 +22,63 @@ async function getPrayerTimes() {
     if (response.ok) {
         const jsonResponse = await response.json();
         const jadwal = jsonResponse['data']['jadwal'][date];
-        todayTimes.push(
-            jadwal['subuh'],
-            jadwal['terbit'],
-            jadwal['dzuhur'],
-            jadwal['ashar'],
-            jadwal['maghrib'],
-            jadwal['isya']
+        todayPrayerTimes.push(
+            ['fajr', jadwal['subuh']],
+            ['sunrise', jadwal['terbit']],
+            ['dzuhr', jadwal['dzuhur']],
+            ['ashr', jadwal['ashar']],
+            ['maghrib', jadwal['maghrib']],
+            ['isya\'', jadwal['isya']],
         )
     }
 }
 getPrayerTimes();
 
 
-// update clock
+// 1 sec loop
 setInterval(() => {
     const now = new Date();
-    let hours = now.getHours().toString().padStart(2, '0');
-    let minutes = now.getMinutes().toString().padStart(2, '0');
-    let seconds = now.getSeconds().toString().padStart(2, '0');
-    clockElem.innerText = `${hours}:${minutes}:${seconds}`;
+
+    updateClock(now);
+    updateNextPrayer(now);
 }, 1000);
 
-// TODO
 // 1. Update next prayer
+// TODO
 // 2. Calculate delta
 // 3. Update time bar
+
+
+function updateClock(now) {
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const seconds = now.getSeconds().toString().padStart(2, '0');
+    clockElem.innerText = `${hours}:${minutes}:${seconds}`;
+}
+
+
+function updateNextPrayer(now) {
+    const currentTimeInMinutes = timeToMinutes(now.getHours(), now.getMinutes());
+    
+    for (let i = 0; i < todayPrayerTimes.length; i++) {
+        const t = todayPrayerTimes[i][1].split(':');
+        const prayerTimeInMinutes = timeToMinutes(t[0], t[1]);
+
+        if (currentTimeInMinutes < prayerTimeInMinutes) {
+            nextPrayerIndex = i;
+            nextPrayerTimeElem.innerText = todayPrayerTimes[i][1];
+            nextPrayerElem.innerText = capitalize(todayPrayerTimes[i][0]);
+            break;
+        }
+    }
+}
+
+
+function timeToMinutes(hours, minutes) {
+    return Number(hours) * 60 + Number(minutes);
+}
+
+
+function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1, str.length);
+}
