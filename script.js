@@ -3,7 +3,8 @@ const clockElem = document.getElementById('clock');
 const nextPrayerTimeElem = document.getElementById('next-prayer-time');
 const nextPrayerElem = document.getElementById('next-prayer');
 
-let nextPrayerIndex = 0;
+let nextPrayerIndex = undefined;
+let nextPrayerTimeDelta = 0;
 const todayPrayerTimes = [];
 // 0- Fajr
 // 1- Sunrise
@@ -28,7 +29,7 @@ async function getPrayerTimes() {
             ['dzuhr', jadwal['dzuhur']],
             ['ashr', jadwal['ashar']],
             ['maghrib', jadwal['maghrib']],
-            ['isya\'', jadwal['isya']],
+            ['isha\'', jadwal['isya']],
         )
     }
 }
@@ -40,15 +41,16 @@ setInterval(() => {
     const now = new Date();
 
     updateClock(now);
-    updateNextPrayer(now);
+    updateNextPrayerIndex(now);
+    calcTimeUntilNextPrayer(now);
 }, 1000);
 
 // 1. Update next prayer
 // 2. Calculate delta
 // TODO
-// 3. Update time bar
-// 4. Have "Next prayer" and "Current prayer" with the former ranging 1 hour before adzan 
-//    and the latter ~ hour after adzan
+// 3. Have "Next prayer" and "Current prayer" with the former ranging 1 hour before adzan 
+//    and the latter ∞ hour after adzan
+// 4. Update time bar
 
 function updateClock(now) {
     const hours = now.getHours().toString().padStart(2, '0');
@@ -58,25 +60,42 @@ function updateClock(now) {
 }
 
 
-function updateNextPrayer(now) {
+function updateNextPrayerIndex(now) {
     const currentTimeInMinutes = timeToMinutes(now.getHours(), now.getMinutes());
-    
+
     for (let i = 0; i < todayPrayerTimes.length; i++) {
         const t = todayPrayerTimes[i][1].split(':');
         const prayerTimeInMinutes = timeToMinutes(t[0], t[1]);
-
-        if (currentTimeInMinutes < prayerTimeInMinutes) {
+        const timeDelta = prayerTimeInMinutes - currentTimeInMinutes;
+        // console.log(`timeDelta with i = ${i} is ${timeDelta}`)
+        
+        if (timeDelta > 0 && timeDelta < 30) {
             nextPrayerIndex = i;
-            nextPrayerTimeElem.innerText = todayPrayerTimes[i][1];
-            nextPrayerElem.innerText = capitalize(todayPrayerTimes[i][0]);
+            // console.log(`nextPrayerIndex updated to ${nextPrayerIndex}`)
             break;
+        }
+
+        // When the page was first opened, nextPrayerIndex would be undefined.
+        // So just find the next prayer index, ignore the condition of <30mins.
+        if (nextPrayerIndex === undefined) {
+            if (currentTimeInMinutes < prayerTimeInMinutes) {
+                nextPrayerIndex = i;
+                // console.log("nextPrayerIndex was undefined")
+                // console.log(`nextPrayerIndex updated to ${nextPrayerIndex}`)
+                break;
+            }
         }
     }
 }
 
 
-function calcTimeDelta(from, to) {
-    return to - from;
+function calcTimeUntilNextPrayer(now) {
+    const currentTimeInMinutes = timeToMinutes(now.getHours(), now.getMinutes());
+
+    const t = todayPrayerTimes[nextPrayerIndex][1].split(':');
+    const prayerTimeInMinutes = timeToMinutes(t[0], t[1]);
+
+    nextPrayerTimeDelta = prayerTimeInMinutes - currentTimeInMinutes;
 }
 
 
