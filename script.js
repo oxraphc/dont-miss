@@ -1,4 +1,7 @@
 const BASE_API_URL = "https://api.myquran.com/v3/sholat/jadwal/d6baf65e0b240ce177cf70da146c8dc8/"
+const TIME_DELTA_THRESHOLD = 30; // Minutes
+const DHUHA_TIME_DELTA_THRESHOLD = 15; // Minutes
+
 const clockElem = document.getElementById('clock');
 const nextPrayerTimeElem = document.getElementById('next-prayer-time');
 const nextPrayerElem = document.getElementById('next-prayer');
@@ -75,9 +78,9 @@ setInterval(() => {
 
 // 1. Update next prayer
 // 2. Calculate delta
-// TODO
 // 3. Have "Next prayer" and "Current prayer" with the former ranging 1 hour before adzan 
 //    and the latter ∞ hour after adzan
+// TODO
 // 4. Update time bar
 
 function updateClock(now) {
@@ -91,24 +94,28 @@ function updateClock(now) {
 function updateNextPrayerIndex(now) {
     const currentTimeInMinutes = timeToMinutes(now.getHours(), now.getMinutes());
 
-    for (let i = 0; i < prayerSchedule.length; i++) {
+    for (let i = 1; i < prayerSchedule.length; i++) {
         const t = prayerSchedule[i][1].split(':');
         const prayerTimeInMinutes = timeToMinutes(t[0], t[1]);
         const timeDelta = prayerTimeInMinutes - currentTimeInMinutes;
 
-        if (timeDelta > 0 && timeDelta < 30) {
-            nextPrayerIndex = i;
-            break;
-        }
-
-        // When the page was first opened, nextPrayerIndex would be undefined.
-        // So just find the next prayer index, ignore the condition of <30mins.
-        if (nextPrayerIndex === undefined) {
-            if (currentTimeInMinutes < prayerTimeInMinutes) {
+        if (timeDelta > 0) {
+            if (i == 3 && timeDelta > DHUHA_TIME_DELTA_THRESHOLD) {
+                nextPrayerIndex = 2;
+                break;
+            }
+            if (timeDelta <= TIME_DELTA_THRESHOLD) {
                 nextPrayerIndex = i;
                 break;
             }
+            if (timeDelta > TIME_DELTA_THRESHOLD) {
+                nextPrayerIndex = i - 1;
+                break;
+            }
         }
+        // When code execution reaches here, it means it is past isha'
+        // So set the nextPrayerIndex to the last loop's iteration, 7 for isha'
+        nextPrayerIndex = i;
     }
 }
 
