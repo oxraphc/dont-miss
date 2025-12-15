@@ -1,39 +1,67 @@
-const API_URL = "https://api.myquran.com/v3/sholat/jadwal/d6baf65e0b240ce177cf70da146c8dc8/today"
+const BASE_API_URL = "https://api.myquran.com/v3/sholat/jadwal/d6baf65e0b240ce177cf70da146c8dc8/"
 const clockElem = document.getElementById('clock');
 const nextPrayerTimeElem = document.getElementById('next-prayer-time');
 const nextPrayerElem = document.getElementById('next-prayer');
 
 let nextPrayerIndex = undefined;
 let nextPrayerTimeDelta = 0;
-const todayPrayerTimes = [];
-// 0- Fajr
-// 1- Sunrise
-// 2- Dzuhr
-// 3- Ashr
-// 4- Maghrib
-// 5- Isha'
+const prayerSchedule = [];
+// 0- Isya' (yesterday)
+// 1- Fajr
+// 2- Sunrise
+// 3- Dhuha
+// 4- Dzuhr
+// 5- Ashr
+// 6- Magrhib
+// 7- Isha'
 
-
-// process today's prayer times
-async function getPrayerTimes() {
+// Fetch and parse prayer schedules
+async function getPrayerSchedule() {
     const now = new Date();
-    const date = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}` // YYYY-MM-DD
+    const todayDate = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}` // YYYY-MM-DD
+    
+    now.setDate(now.getDate() - 1); // Rewind date by 1 day
+    const yesterdayDate = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}` // YYYY-MM-DD
 
-    const response = await fetch(API_URL);
-    if (response.ok) {
-        const jsonResponse = await response.json();
-        const jadwal = jsonResponse['data']['jadwal'][date];
-        todayPrayerTimes.push(
-            ['fajr', jadwal['subuh']],
-            ['sunrise', jadwal['terbit']],
-            ['dzuhr', jadwal['dzuhur']],
-            ['ashr', jadwal['ashar']],
-            ['maghrib', jadwal['maghrib']],
-            ['isha\'', jadwal['isya']],
-        )
+    // Fetch and parse yesterday's schedule
+    try {
+        const response = await fetch(BASE_API_URL + yesterdayDate);
+        if (response.ok) {
+            const jsonResponse = await response.json();
+            const jadwal = jsonResponse['data']['jadwal'][yesterdayDate];
+            prayerSchedule.push(
+                ['isha\'', jadwal['isya']] // We only need yesterday's isha time
+            )
+        } else {
+            throw new Error(`Failed to fetch yesterday prayer schedule (${response.status})`);
+        }
+    } catch (e) {
+        console.error(e);
+    }
+
+    // Fetch and parse today's schedule
+    try {
+        const response = await fetch(BASE_API_URL + 'today');
+        if (response.ok) {
+            const jsonResponse = await response.json();
+            const jadwal = jsonResponse['data']['jadwal'][todayDate];
+            prayerSchedule.push(
+                ['fajr', jadwal['subuh']],
+                ['sunrise', jadwal['terbit']],
+                ['dhuha', jadwal['dhuha']],
+                ['dzuhr', jadwal['dzuhur']],
+                ['ashr', jadwal['ashar']],
+                ['maghrib', jadwal['maghrib']],
+                ['isha\'', jadwal['isya']],
+            )
+        } else {
+            throw new Error(`Failed to fetch today prayer schedule (${response.status})`);
+        }
+    } catch (e) {
+        console.error(e);
     }
 }
-getPrayerTimes();
+getPrayerSchedule();
 
 
 // 1 sec loop
@@ -63,15 +91,13 @@ function updateClock(now) {
 function updateNextPrayerIndex(now) {
     const currentTimeInMinutes = timeToMinutes(now.getHours(), now.getMinutes());
 
-    for (let i = 0; i < todayPrayerTimes.length; i++) {
-        const t = todayPrayerTimes[i][1].split(':');
+    for (let i = 0; i < prayerSchedule.length; i++) {
+        const t = prayerSchedule[i][1].split(':');
         const prayerTimeInMinutes = timeToMinutes(t[0], t[1]);
         const timeDelta = prayerTimeInMinutes - currentTimeInMinutes;
-        // console.log(`timeDelta with i = ${i} is ${timeDelta}`)
-        
+
         if (timeDelta > 0 && timeDelta < 30) {
             nextPrayerIndex = i;
-            // console.log(`nextPrayerIndex updated to ${nextPrayerIndex}`)
             break;
         }
 
@@ -80,8 +106,6 @@ function updateNextPrayerIndex(now) {
         if (nextPrayerIndex === undefined) {
             if (currentTimeInMinutes < prayerTimeInMinutes) {
                 nextPrayerIndex = i;
-                // console.log("nextPrayerIndex was undefined")
-                // console.log(`nextPrayerIndex updated to ${nextPrayerIndex}`)
                 break;
             }
         }
@@ -92,7 +116,7 @@ function updateNextPrayerIndex(now) {
 function calcTimeUntilNextPrayer(now) {
     const currentTimeInMinutes = timeToMinutes(now.getHours(), now.getMinutes());
 
-    const t = todayPrayerTimes[nextPrayerIndex][1].split(':');
+    const t = prayerSchedule[nextPrayerIndex][1].split(':');
     const prayerTimeInMinutes = timeToMinutes(t[0], t[1]);
 
     nextPrayerTimeDelta = prayerTimeInMinutes - currentTimeInMinutes;
