@@ -31,10 +31,10 @@ async function getPrayerSchedule() {
     prayerSchedule.length = 0; // clear prayerSchedule array
 
     const now = new Date();
-    const todayDate = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}` // YYYY-MM-DD
-    
+    const todayDate = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`; // YYYY-MM-DD
+
     now.setDate(now.getDate() - 1); // Rewind date by 1 day
-    const yesterdayDate = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}` // YYYY-MM-DD
+    const yesterdayDate = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`; // YYYY-MM-DD
 
     // Fetch and parse yesterday's schedule
     try {
@@ -81,7 +81,7 @@ async function getPrayerSchedule() {
 // 1 sec loop
 setInterval(() => {
     const now = new Date();
-    
+
     if (savedDate !== now.getDate()) {
         savedDate = now.getDate();
         getPrayerSchedule();
@@ -100,6 +100,10 @@ setInterval(() => {
 // now.setHours(11);
 // now.setMinutes(31);
 // setInterval(() => {
+//     if (savedDate !== now.getDate()) {
+//         savedDate = now.getDate();
+//         getPrayerSchedule();
+//     }
 //     if (prayerScheduleDownloaded) {
 //         updateClock(now);
 //         updateNextPrayerIndex(now);
@@ -116,9 +120,10 @@ setInterval(() => {
 //    and the latter ∞ hour after adzan
 // 4. Update time bar
 // 5. Fetch new time schedule when day changes
+// 6. Side arrow when progress goes beyond +-30m
 // TODO
-// 6. Add loading screen when waiting for data
-// 7. Refactor everything
+// 7. Add loading screen when waiting for data
+// 8. Refactor everything
 
 function updateClock(now) {
     const hours = now.getHours().toString().padStart(2, '0');
@@ -189,7 +194,11 @@ function updateView() {
     }
 
     // Update Progresses Bar label
-    deltaTimeLabel.innerText = formatMinutes(nextPrayerTimeDelta);
+    if (nextPrayerTimeDelta < -30) {
+        deltaTimeLabel.innerHTML = '<br><br>' + formatMinutes(nextPrayerTimeDelta) + ' ▶';
+    } else {
+        deltaTimeLabel.innerHTML = '<br>▲<br>' + formatMinutes(nextPrayerTimeDelta);
+    }
 
     // Update Progresses Bar Label Container Position
     let useThreshold;
@@ -216,7 +225,7 @@ function updateView() {
 
 function formatMinutes(minutes) {
     if (!minutes) {
-        return '0m';
+        return 'Now';
     }
 
     const m = Math.abs(minutes) % 60;
@@ -236,7 +245,7 @@ function formatMinutes(minutes) {
         s.push(`${m}m`);
     }
 
-    return prefix +s.join(' ');
+    return prefix + s.join(' ');
 }
 
 
@@ -252,13 +261,13 @@ function capitalize(str) {
 
 function rangePercent(min, current, max) {
     const full_max = Math.abs(min) + Math.abs(max)
-    
-    let percentage = ((current + full_max / 2) / full_max) * 100 
-    
+
+    let percentage = ((current + full_max / 2) / full_max) * 100;
+
     if (min > max) {
         percentage = 100 - percentage;
     } // flip the value.
-    // orignially, the percentage will always favored the 
+    // originally, the percentage will always favored the 
     // largest numeric, ignoring the min-max placement.
 
     return percentage;

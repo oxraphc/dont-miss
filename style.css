@@ -129,6 +129,10 @@ html, body {
     height: 32px;
 }
 
+#delta-time-label {
+    text-align: center;
+}
+
 #progresses-bar-label div {
     display: flex;
     flex-direction: column;
