@@ -11,7 +11,7 @@ const progressesBar = document.getElementById('progresses-bar');
 const progressesBarLabelContainer = document.getElementById('progresses-bar-label');
 const progressesBarLabelContainerContainer = document.getElementById('label-container');
 
-let savedDate;
+let savedDate = new Date().getDate();
 let prayerScheduleDownloaded = false;
 let nextPrayerIndex;
 let nextPrayerTimeDelta = 0;
@@ -76,7 +76,7 @@ async function getPrayerSchedule() {
 
     prayerScheduleDownloaded = true;
 }
-
+getPrayerSchedule();
 
 // 1 sec loop
 setInterval(() => {
@@ -87,8 +87,8 @@ setInterval(() => {
         getPrayerSchedule();
     }
 
+    updateClock(now);
     if (prayerScheduleDownloaded) {
-        updateClock(now);
         updateNextPrayerIndex(now);
         calcTimeUntilNextPrayer(now);
         updateView();
@@ -121,8 +121,8 @@ setInterval(() => {
 // 4. Update time bar
 // 5. Fetch new time schedule when day changes
 // 6. Side arrow when progress goes beyond +-30m
-// TODO
 // 7. Add loading screen when waiting for data
+// TODO
 // 8. Refactor everything
 
 function updateClock(now) {
