@@ -169,7 +169,11 @@ function calcTimeUntilNextPrayer(now) {
     const t = sel.split(':');
     const prayerTimeInMinutes = timeToMinutes(t[0], t[1]);
 
-    nextPrayerTimeDelta = prayerTimeInMinutes - currentTimeInMinutes;
+    if (nextPrayerIndex === 0) {
+        nextPrayerTimeDelta = prayerTimeInMinutes - (1440 + currentTimeInMinutes); // 24 hours = 1440 minutes
+    } else {
+        nextPrayerTimeDelta = prayerTimeInMinutes - currentTimeInMinutes;
+    }
 }
 
 
