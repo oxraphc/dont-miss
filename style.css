@@ -9,7 +9,6 @@ html, body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 2rem;
     position: relative;
     height: 100vh;
     width: 100%;
@@ -50,7 +49,7 @@ html, body {
 
 #next-prayer {
     font-size: 2rem;
-    margin: 0;
+    margin: 0 0 2rem 0;
 }
 
 #next-prayer-container p {
@@ -60,6 +59,16 @@ html, body {
 
 #next-prayer-time {
     margin: 0 2vh;
+}
+
+#progress-bar-labels {
+    display: flex;
+    justify-content: space-between;
+    width: calc(70vw + 4rem);
+}
+
+.progress-bar-label {
+    color: grey;
 }
 
 #progress-bar-container {
@@ -93,12 +102,6 @@ html, body {
     width: inherit;
     height: 5px;
     background-color: lightgrey;
-}
-
-#progress-bar-labels {
-    display: flex;
-    justify-content: space-between;
-    width: inherit;
 }
 
 #progress {

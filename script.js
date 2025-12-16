@@ -242,11 +242,11 @@ function formatMinutes(minutes) {
     }
 
     if (h > 0) {
-        s.push(`${h}h`);
+        s.push(`${h} hr`);
     }
 
     if (m > 0) {
-        s.push(`${m}m`);
+        s.push(`${m} min`);
     }
 
     return prefix + s.join(' ');
