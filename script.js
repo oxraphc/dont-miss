@@ -11,8 +11,9 @@ const progressesBar = document.getElementById('progresses-bar');
 const progressesBarLabelContainer = document.getElementById('progresses-bar-label');
 const progressesBarLabelContainerContainer = document.getElementById('label-container');
 
+let savedDate;
 let prayerScheduleDownloaded = false;
-let nextPrayerIndex = undefined;
+let nextPrayerIndex;
 let nextPrayerTimeDelta = 0;
 const prayerSchedule = [];
 // 0- Isya' (yesterday)
@@ -26,6 +27,9 @@ const prayerSchedule = [];
 
 // Fetch and parse prayer schedules
 async function getPrayerSchedule() {
+    prayerScheduleDownloaded = false;
+    prayerSchedule.length = 0; // clear prayerSchedule array
+
     const now = new Date();
     const todayDate = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}` // YYYY-MM-DD
     
@@ -72,17 +76,23 @@ async function getPrayerSchedule() {
 
     prayerScheduleDownloaded = true;
 }
-getPrayerSchedule();
 
 
 // 1 sec loop
 setInterval(() => {
     const now = new Date();
+    
+    if (savedDate !== now.getDate()) {
+        savedDate = now.getDate();
+        getPrayerSchedule();
+    }
 
-    updateClock(now);
-    updateNextPrayerIndex(now);
-    calcTimeUntilNextPrayer(now);
-    updateView();
+    if (prayerScheduleDownloaded) {
+        updateClock(now);
+        updateNextPrayerIndex(now);
+        calcTimeUntilNextPrayer(now);
+        updateView();
+    }
 }, 1000);
 
 // =================================================== TESTING / DEBUG ONLY
@@ -105,9 +115,10 @@ setInterval(() => {
 // 3. Have "Next prayer" and "Current prayer" with the former ranging 1 hour before adzan 
 //    and the latter ∞ hour after adzan
 // 4. Update time bar
+// 5. Fetch new time schedule when day changes
 // TODO
-// 5. Add loading screen when waiting for data
-// 6. Refactor everything
+// 6. Add loading screen when waiting for data
+// 7. Refactor everything
 
 function updateClock(now) {
     const hours = now.getHours().toString().padStart(2, '0');
