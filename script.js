@@ -1,4 +1,4 @@
-const BASE_API_URL = "https://api.myquran.com/v3/sholat/jadwal/d6baf65e0b240ce177cf70da146c8dc8/"
+const API_BASE_URL = "https://api.myquran.com/v3/sholat/jadwal/d6baf65e0b240ce177cf70da146c8dc8/"
 const TIME_DELTA_THRESHOLD = 30; // Minutes
 const DHUHA_TIME_DELTA_THRESHOLD = 15; // Minutes
 
@@ -25,6 +25,7 @@ const prayerSchedule = [];
 // 6- Magrhib
 // 7- Isha'
 
+
 // Fetch and parse prayer schedules
 async function getPrayerSchedule() {
     prayerScheduleDownloaded = false;
@@ -38,7 +39,7 @@ async function getPrayerSchedule() {
 
     // Fetch and parse yesterday's schedule
     try {
-        const response = await fetch(BASE_API_URL + yesterdayDate);
+        const response = await fetch(API_BASE_URL + yesterdayDate);
         if (response.ok) {
             const jsonResponse = await response.json();
             const jadwal = jsonResponse['data']['jadwal'][yesterdayDate];
@@ -54,7 +55,7 @@ async function getPrayerSchedule() {
 
     // Fetch and parse today's schedule
     try {
-        const response = await fetch(BASE_API_URL + 'today');
+        const response = await fetch(API_BASE_URL + 'today');
         if (response.ok) {
             const jsonResponse = await response.json();
             const jadwal = jsonResponse['data']['jadwal'][todayDate];
@@ -78,16 +79,17 @@ async function getPrayerSchedule() {
 }
 getPrayerSchedule();
 
-// 1 sec loop
+
+// 1 second update loop
 setInterval(() => {
     const now = new Date();
+    updateClock(now);
 
     if (savedDate !== now.getDate()) {
         savedDate = now.getDate();
         getPrayerSchedule();
     }
 
-    updateClock(now);
     if (prayerScheduleDownloaded) {
         updateNextPrayerIndex(now);
         calcTimeUntilNextPrayer(now);
@@ -122,8 +124,8 @@ setInterval(() => {
 // 5. Fetch new time schedule when day changes
 // 6. Side arrow when progress goes beyond +-30m
 // 7. Add loading screen when waiting for data
-// TODO
 // 8. Refactor everything
+// TODO
 
 function updateClock(now) {
     const hours = now.getHours().toString().padStart(2, '0');
@@ -165,12 +167,12 @@ function updateNextPrayerIndex(now) {
 function calcTimeUntilNextPrayer(now) {
     const currentTimeInMinutes = timeToMinutes(now.getHours(), now.getMinutes());
 
-    const sel = prayerSchedule[nextPrayerIndex][1];
-    const t = sel.split(':');
+    const prayerTime = prayerSchedule[nextPrayerIndex][1];
+    const t = prayerTime.split(':'); // ["<hours>", "<minutes>"]
     const prayerTimeInMinutes = timeToMinutes(t[0], t[1]);
 
     if (nextPrayerIndex === 0) {
-        nextPrayerTimeDelta = prayerTimeInMinutes - (1440 + currentTimeInMinutes); // 24 hours = 1440 minutes
+        nextPrayerTimeDelta = prayerTimeInMinutes - (1440 + currentTimeInMinutes); // 1440 = 24h in minutes
     } else {
         nextPrayerTimeDelta = prayerTimeInMinutes - currentTimeInMinutes;
     }
@@ -185,26 +187,37 @@ function updateView() {
     // Update nextTitle
     if (nextPrayerIndex !== 2) {
         if (nextPrayerTimeDelta > 0) {
-            nextTitleElem.innerText = 'Next prayer :'
+            nextTitleElem.innerText = 'Next prayer :';
         } else if (nextPrayerTimeDelta <= 0) {
-            nextTitleElem.innerText = 'Current prayer :'
+            nextTitleElem.innerText = 'Current prayer :';
         }
     } else {
         if (nextPrayerTimeDelta > 0) {
-            nextTitleElem.innerText = 'Upcoming :'
+            nextTitleElem.innerText = 'Upcoming :';
         } else if (nextPrayerTimeDelta <= 0) {
-            nextTitleElem.innerText = 'Currently :'
+            nextTitleElem.innerText = 'Currently :';
         }
     }
 
-    // Update Progresses Bar label
+    // Update progress's bar label
     if (nextPrayerTimeDelta < -30) {
         deltaTimeLabel.innerHTML = '<br><br>' + formatMinutes(nextPrayerTimeDelta) + ' ▶';
     } else {
         deltaTimeLabel.innerHTML = '<br>▲<br>' + formatMinutes(nextPrayerTimeDelta);
     }
+    
+    // Get progress's bar label container offset 
+    const containerComputedStyle = window.getComputedStyle(progressesBarLabelContainerContainer);
+    const containerOffset = (parseInt(containerComputedStyle.width, 10) / 2) + 2;
+    const centerOffset = -1.5; // To properly center the progress's bar marker when hitting the 50% mark
+    
+    // Update progress's bar and label position
+    const progress = nextPrayerTimeDeltaPercent();
+    progressesBar.style.width = `calc(${progress}% + ${centerOffset}px)`;
+    progressesBarLabelContainer.style.width = `calc(${progress}% + ${containerOffset}px + ${centerOffset}px)`;
+}
 
-    // Update Progresses Bar Label Container Position
+function nextPrayerTimeDeltaPercent() {
     let useThreshold;
     if (nextPrayerIndex != 2) {
         useThreshold = TIME_DELTA_THRESHOLD;
@@ -212,18 +225,14 @@ function updateView() {
         useThreshold = DHUHA_TIME_DELTA_THRESHOLD;
     }
 
-    let progress = rangePercent(useThreshold, nextPrayerTimeDelta, (useThreshold * -1));
-    if (progress > 100) {
-        progress = progress - (progress - 100);
-    } // bracket to 100
-
-    const containerComputedStyle = window.getComputedStyle(progressesBarLabelContainerContainer);
-    const containerOffset = (parseInt(containerComputedStyle.width, 10) / 2) + 2;
-    const centerOffset = 1.5;
-
-    progressesBar.style.width = `calc(${progress}% - ${centerOffset}px)`;
-    progressesBarLabelContainer.style.width = `calc(${progress}% + ${containerOffset}px - ${centerOffset}px)`;
-
+    let percent = rangePercent(useThreshold, nextPrayerTimeDelta, (useThreshold * -1));
+    
+    // Bracket to 100
+    if (percent > 100) {
+        percent = percent - (percent - 100);
+    }
+        
+    return percent;
 }
 
 
@@ -264,14 +273,15 @@ function capitalize(str) {
 
 
 function rangePercent(min, current, max) {
-    const full_max = Math.abs(min) + Math.abs(max)
+    const max_total = Math.abs(min) + Math.abs(max);
 
-    let percentage = ((current + full_max / 2) / full_max) * 100;
+    let percentage = ((current + max_total / 2) / max_total) * 100;
 
+    // Invert to its complement if min > max
     if (min > max) {
         percentage = 100 - percentage;
-    } // flip the value.
-    // originally, the percentage will always favored the 
+    }
+    // Originally, the percentage will always favored the 
     // largest numeric, ignoring the min-max placement.
 
     return percentage;
