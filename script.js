@@ -29,13 +29,13 @@ const prayerSchedule = [];
 // Fetch and parse prayer schedules
 async function getPrayerSchedule() {
     prayerScheduleDownloaded = false;
-    prayerSchedule.length = 0; // clear prayerSchedule array
+    prayerSchedule.length = 0; // Clear prayerSchedule array
 
     const now = new Date();
-    const todayDate = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`; // YYYY-MM-DD
+    const todayDate = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`; // YYYY-MM-DD
 
     now.setDate(now.getDate() - 1); // Rewind date by 1 day
-    const yesterdayDate = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`; // YYYY-MM-DD
+    const yesterdayDate = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`; // YYYY-MM-DD
 
     // Fetch and parse yesterday's schedule
     try {
