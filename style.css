@@ -21,6 +21,7 @@ html, body {
     width: 100%;
     padding: 3px;
     box-sizing: border-box;
+    z-index: 2;
 }
 
 #top-bar img {
@@ -28,7 +29,13 @@ html, body {
     width: auto;
 }
 
-#top-bar div {
+#top-bar-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.top-bar-div-border {
     display: flex;
     align-items: center;
     justify-content: center;
