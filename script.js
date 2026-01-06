@@ -217,11 +217,18 @@ function updateView() {
     
     // Get progress's bar label container offset 
     const containerComputedStyle = window.getComputedStyle(progressesBarLabelContainerContainer);
-    const containerOffset = (parseInt(containerComputedStyle.width, 10) / 2) + 2;
-    const centerOffset = -1.5; // To properly center the progress's bar marker when hitting the 50% mark
+    let containerOffset = (parseInt(containerComputedStyle.width, 10) / 2) + 2;
+    let centerOffset = -1.5; // To properly center the progress's bar marker when hitting the 50% mark
+    
+    const progress = nextPrayerTimeDeltaPercent();
+    
+    if (progress >= 100) {
+        // Omit any offsets if full progress
+        centerOffset = 0;
+        containerOffset = 0;
+    }
     
     // Update progress's bar and label position
-    const progress = nextPrayerTimeDeltaPercent();
     progressesBar.style.width = `calc(${progress}% + ${centerOffset}px)`;
     progressesBarLabelContainer.style.width = `calc(${progress}% + ${containerOffset}px + ${centerOffset}px)`;
 }
