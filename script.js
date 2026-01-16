@@ -120,6 +120,7 @@ setInterval(() => {
 // const now = new Date();
 // now.setHours(11);
 // now.setMinutes(31);
+// console.log("Debug mode active!")
 // setInterval(() => {
 //     if (savedDate !== now.getDate()) {
 //         savedDate = now.getDate();
@@ -317,16 +318,20 @@ function capitalize(str) {
 
 
 function rangePercent(min, current, max) {
-    const max_total = Math.abs(min) + Math.abs(max);
+    const rangeTotal = Math.abs(min) + Math.abs(max);
+    const currentToMinDistance = current + (min * -1);
+    const ones = 100 / rangeTotal;
 
-    let percentage = ((current + max_total / 2) / max_total) * 100;
+    /**
+     * Logically, if we just divide 100% with a number, we'll get how
+     * many % a one of that number get.
+     * 
+     * For example, if we divide 100% with 50, we'll get that each 1's
+     * of our 50 took each 2% of the 100%
+     * 
+     * Therefore, we could just multiply how many 1's took of the 100%
+     * with a number within our 50 to get the percentage.
+     */
 
-    // Invert to its complement if min > max
-    if (min > max) {
-        percentage = 100 - percentage;
-    }
-    // Originally, the percentage will always favored the 
-    // largest numeric, ignoring the min-max placement.
-
-    return percentage;
+    return ones * Math.abs(currentToMinDistance);
 }
