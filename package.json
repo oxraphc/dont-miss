@@ -1,0 +1,26 @@
+{
+  "name": "dont-miss",
+  "version": "1.0.0",
+  "description": "Simple website to view prayer times",
+  "main": "script.js",
+  "scripts": {
+    "lint": "eslint ./"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oxraphc/dont-miss.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oxraphc/dont-miss/issues"
+  },
+  "homepage": "https://github.com/oxraphc/dont-miss#readme",
+  "devDependencies": {
+    "@eslint/css": "^0.14.1",
+    "@eslint/js": "^9.39.2",
+    "eslint": "^9.39.2",
+    "globals": "^17.0.0"
+  }
+}
