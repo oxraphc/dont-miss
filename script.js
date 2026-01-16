@@ -3,19 +3,19 @@ const TIME_DELTA_THRESHOLD = 30; // Minutes
 const DHUHA_TIME_DELTA_THRESHOLD = 15; // Minutes
 
 const clockElem = document.getElementById('clock');
-const nextTitleElem = document.getElementById('next-title');
-const nextPrayerElem = document.getElementById('next-prayer');
-const nextPrayerTimeElem = document.getElementById('next-prayer-time');
-const deltaTimeLabel = document.getElementById('delta-time-label');
-const progressesBar = document.getElementById('progresses-bar');
-const progressesBarLabelContainer = document.getElementById('progresses-bar-label');
-const progressesBarLabelContainerContainer = document.getElementById('label-container');
+const titleElem = document.getElementById('title');
+const prayerNameElem = document.getElementById('prayer-name');
+const prayerTimeElem = document.getElementById('prayer-time');
+const deltaTimeElem = document.getElementById('delta-time');
+const progressBar = document.getElementById('progress');
+const progressMarkerLabelContainer = document.getElementById('progress-marker-label-container');
+const deltaTimeContainer = document.getElementById('delta-time-container');
 const locationSelector = document.getElementById('location');
 
 let savedDate = new Date().getDate();
 let prayerScheduleDownloaded = false;
-let nextPrayerIndex;
-let nextPrayerTimeDelta = 0;
+let prayerIndex;
+let prayerTimeDelta = 0;
 let selectedLocationIndex = locationSelector.selectedIndex;
 const prayerSchedule = [];
 // 0- Isya' (yesterday)
@@ -110,8 +110,8 @@ setInterval(() => {
     }
 
     if (prayerScheduleDownloaded) {
-        updateNextPrayerIndex(now);
-        calcTimeUntilNextPrayer(now);
+        updatePrayerIndex(now);
+        updatePrayerTimeDelta(now);
         updateView();
     }
 }, 1000);
@@ -127,8 +127,8 @@ setInterval(() => {
 //     }
 //     if (prayerScheduleDownloaded) {
 //         updateClock(now);
-//         updateNextPrayerIndex(now);
-//         calcTimeUntilNextPrayer(now);
+//         updatePrayerIndex(now);
+//         updatePrayerTimeDelta(now);
 //         updateView();
 //         now.setSeconds(now.getSeconds() + 1);
 //     }
@@ -144,7 +144,7 @@ function updateClock(now) {
 }
 
 
-function updateNextPrayerIndex(now) {
+function updatePrayerIndex(now) {
     const currentTimeInMinutes = timeToMinutes(now.getHours(), now.getMinutes());
 
     for (let i = 1; i < prayerSchedule.length; i++) {
@@ -154,73 +154,82 @@ function updateNextPrayerIndex(now) {
 
         if (timeDelta > 0) {
             if (i === 3 && timeDelta > DHUHA_TIME_DELTA_THRESHOLD) {
-                nextPrayerIndex = 2;
+                prayerIndex = 2;
                 break;
             }
             if (timeDelta <= TIME_DELTA_THRESHOLD) {
-                nextPrayerIndex = i;
+                prayerIndex = i;
                 break;
             }
             if (timeDelta > TIME_DELTA_THRESHOLD) {
-                nextPrayerIndex = i - 1;
+                prayerIndex = i - 1;
                 break;
             }
         }
         // When code execution reaches here, it means it is past isha'
-        // So set the nextPrayerIndex to the last loop's iteration, 7 for isha'
-        nextPrayerIndex = i;
+        // So set the prayerIndex to the last loop's iteration, 7 for isha'
+        prayerIndex = i;
     }
 }
 
 
-function calcTimeUntilNextPrayer(now) {
+function updatePrayerTimeDelta(now) {
     const currentTimeInMinutes = timeToMinutes(now.getHours(), now.getMinutes());
 
-    const prayerTime = prayerSchedule[nextPrayerIndex][1];
+    const prayerTime = prayerSchedule[prayerIndex][1];
     const t = prayerTime.split(':'); // ["<hours>", "<minutes>"]
     const prayerTimeInMinutes = timeToMinutes(t[0], t[1]);
 
-    if (nextPrayerIndex === 0) {
-        nextPrayerTimeDelta = prayerTimeInMinutes - (1440 + currentTimeInMinutes); // 1440 = 24h in minutes
+    if (prayerIndex === 0) {
+        prayerTimeDelta = prayerTimeInMinutes - (1440 + currentTimeInMinutes); // 1440 = 24h in minutes
     } else {
-        nextPrayerTimeDelta = prayerTimeInMinutes - currentTimeInMinutes;
+        prayerTimeDelta = prayerTimeInMinutes - currentTimeInMinutes;
     }
 }
 
 
 function updateView() {
-    // Update nextPrayer
-    nextPrayerElem.innerText = capitalize(prayerSchedule[nextPrayerIndex][0]);
-    nextPrayerTimeElem.innerText = prayerSchedule[nextPrayerIndex][1];
+    prayerNameElem.innerText = capitalize(prayerSchedule[prayerIndex][0]);
+    prayerTimeElem.innerText = prayerSchedule[prayerIndex][1];
 
-    // Update nextTitle
-    if (nextPrayerIndex !== 2) {
-        if (nextPrayerTimeDelta > 0) {
-            nextTitleElem.innerText = 'Next prayer :';
-        } else if (nextPrayerTimeDelta <= 0) {
-            nextTitleElem.innerText = 'Current prayer :';
+    updateTitle();
+    updateDeltaTimeLabel();
+    updateProgressBar();
+}
+
+
+function updateTitle() {
+    if (prayerIndex !== 2) {
+        if (prayerTimeDelta > 0) {
+            titleElem.innerText = 'Next prayer :';
+        } else if (prayerTimeDelta <= 0) {
+            titleElem.innerText = 'Current prayer :';
         }
     } else {
-        if (nextPrayerTimeDelta > 0) {
-            nextTitleElem.innerText = 'Upcoming :';
-        } else if (nextPrayerTimeDelta <= 0) {
-            nextTitleElem.innerText = 'Currently :';
+        if (prayerTimeDelta > 0) {
+            titleElem.innerText = 'Upcoming :';
+        } else if (prayerTimeDelta <= 0) {
+            titleElem.innerText = 'Currently :';
         }
     }
+}
 
-    // Update progress's bar label
-    if (nextPrayerTimeDelta < -30) {
-        deltaTimeLabel.innerHTML = '<br><br>' + formatMinutes(nextPrayerTimeDelta) + ' ▶';
+
+function updateDeltaTimeLabel() {
+    if (prayerTimeDelta < -30) {
+        deltaTimeElem.innerHTML = '<br><br>' + formatMinutes(prayerTimeDelta) + ' ▶';
     } else {
-        deltaTimeLabel.innerHTML = '<br>▲<br>' + formatMinutes(nextPrayerTimeDelta);
+        deltaTimeElem.innerHTML = '<br>▲<br>' + formatMinutes(prayerTimeDelta);
     }
-    
-    // Get progress's bar label container offset 
-    const containerComputedStyle = window.getComputedStyle(progressesBarLabelContainerContainer);
+}
+
+
+function updateProgressBar() {
+    // Get progress bar label container offset 
+    const progress = getPrayerTimeDeltaPercent();
+    const containerComputedStyle = window.getComputedStyle(deltaTimeContainer);
     let containerOffset = (parseInt(containerComputedStyle.width, 10) / 2) + 2;
     let centerOffset = -1.5; // To properly center the progress's bar marker when hitting the 50% mark
-    
-    const progress = nextPrayerTimeDeltaPercent();
     
     if (progress >= 100) {
         // Omit any offsets if full progress
@@ -228,9 +237,9 @@ function updateView() {
         containerOffset = 0;
     }
     
-    // Update progress's bar and label position
-    progressesBar.style.width = `calc(${progress}% + ${centerOffset}px)`;
-    progressesBarLabelContainer.style.width = `calc(${progress}% + ${containerOffset}px + ${centerOffset}px)`;
+    // Update progress bar and label position
+    progressBar.style.width = `calc(${progress}% + ${centerOffset}px)`;
+    progressMarkerLabelContainer.style.width = `calc(${progress}% + ${containerOffset}px + ${centerOffset}px)`;
 }
 
 
@@ -240,27 +249,27 @@ locationSelector.addEventListener('change', () => {
     console.log(`Selected location changed to ${locationSelector.value}`);
 
     // Reset view while fetching
-    nextTitleElem.innerText = 'ㅤ';
-    nextPrayerElem.innerText = 'ㅤ';
-    nextPrayerTimeElem.innerText = 'Fetching schedule...';
-    deltaTimeLabel.innerText = '';
-    progressesBar.style.width = '0';
-    progressesBarLabelContainer.style.width = '0';
+    titleElem.innerText = 'ㅤ';
+    prayerNameElem.innerText = 'ㅤ';
+    prayerTimeElem.innerText = 'Fetching schedule...';
+    deltaTimeElem.innerText = '';
+    progressBar.style.width = '0';
+    progressMarkerLabelContainer.style.width = '0';
     
     // Fetch new schedule with new location
     getPrayerSchedule();
 });
 
 
-function nextPrayerTimeDeltaPercent() {
+function getPrayerTimeDeltaPercent() {
     let useThreshold;
-    if (nextPrayerIndex != 2) {
+    if (prayerIndex != 2) {
         useThreshold = TIME_DELTA_THRESHOLD;
     } else {
         useThreshold = DHUHA_TIME_DELTA_THRESHOLD;
     }
 
-    let percent = rangePercent(useThreshold, nextPrayerTimeDelta, (useThreshold * -1));
+    let percent = rangePercent(useThreshold, prayerTimeDelta, (useThreshold * -1));
     
     // Bracket to 100
     if (percent > 100) {

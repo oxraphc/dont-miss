@@ -11,9 +11,9 @@
 </head>
 <body>
     <div id="top-bar">
-        <div id="top-bar-left">
-            <div class="top-bar-div-border">
-                <img id="logo" src="assets/svgs/logo.svg">
+        <div class="container-centered-row container-gap">
+            <div class="container-centered-row container-border">
+                <img class="logo" src="assets/svgs/logo.svg">
             </div>
             <div>
                 <label for="location">Location:</label>
@@ -31,35 +31,35 @@
                 </select>
             </div>
         </div>
-        <div class="top-bar-div-border">
-            <p id="clock">XX:XX:XX</p>
+        <div class="container-centered-row container-border">
+            <p id="clock" class="no-margin">XX:XX:XX</p>
         </div>
     </div>
-    <div id="main">
-        <div id="next-prayer-container">
-            <p id="next-title">ㅤ</p>
-            <h1 id="next-prayer">ㅤ</h1>
-            <div id="progress-bar-labels">
-                <p class="progress-bar-label">-30 min</p>
-                <p id="next-prayer-time">Fetching schedule...</p>
-                <p class="progress-bar-label">+30 min</p>
-            </div>
+    <div id="main" class="container-centered-column">
+        <div class="container-centered-column">
+            <p id="title" class="p-margin-top-bottom text-align-center">ㅤ</p>
+            <h1 id="prayer-name" class="text-align-center">ㅤ</h1>
         </div>
-        <div id="progress-bar-container">
-            <div id="progress-bar">
-                <div id="markers"> 
-                    <div class="marker"></div>
-                    <div class="marker"></div>
-                    <div class="marker"></div>
+        <div id="progress-bar-container" class="container-centered-column">
+            <div class="container-space-between-row container-align-end width-inherit">
+                <p class="text-align-center p-margin-top-bottom color-grey">-30 min</p>
+                <p id="prayer-time" class="text-align-center p-margin-top-bottom">Fetching schedule...</p>
+                <p class="text-align-center p-margin-top-bottom color-grey">+30 min</p>
+            </div>
+            <div id="progress-bar" class="container-centered-column">
+                <div id="progress-bar-marker-container" class="container-space-between-row width-inherit"> 
+                    <div class="progress-bar-marker"></div>
+                    <div class="progress-bar-marker"></div>
+                    <div class="progress-bar-marker"></div>
                 </div>
-                <div id="bar"></div>
-                <div id="progress">
-                    <div id="progresses-bar"></div>
-                    <div id="progresses-bar-marker"></div>
+                <div id="bar" class="width-inherit"></div>
+                <div id="progress-container" class="width-inherit">
+                    <div id="progress" class="bg-color-black"></div>
+                    <div id="progress-marker" class="bg-color-black"></div>
                 </div>
-                <div id="progresses-bar-label">
-                    <div id="label-container">
-                        <p id="delta-time-label"></p>
+                <div id="progress-marker-label-container">
+                    <div id="delta-time-container">
+                        <p id="delta-time" class="no-margin text-align-center"></p>
                     </div>
                 </div>
             </div>

@@ -4,15 +4,6 @@ html, body {
     /* overflow-x: hidden; */
 }
 
-#main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    height: 100vh;
-    width: 100%;
-}
 
 #top-bar {
     position: absolute;
@@ -24,113 +15,124 @@ html, body {
     z-index: 2;
 }
 
-#top-bar img {
+
+#main {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+}
+
+.logo {
     height: calc(1rem + 1vw);
     width: auto;
 }
 
-#top-bar-left {
-    display: flex;
-    align-items: center;
+.container-gap {
     gap: 1rem;
 }
 
-.top-bar-div-border {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.container-border {
     padding: 0.5rem 1rem;
     border: 3px solid black;
 }
 
-#clock {
+.no-margin {
     margin: 0;
 }
 
-#next-prayer-container {
+.container-centered-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container-centered-column {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-#next-prayer {
+#prayer-name {
     font-size: 2rem;
     margin: 0 0 2rem 0;
 }
 
-#next-prayer-container p {
+.p-margin-top-bottom {
     margin-top: 1vh;
     margin-bottom: 1vh;
 }
 
-#next-prayer-time {
-    margin: 0 2vh;
-}
-
-#progress-bar-labels {
-    display: flex;
-    justify-content: space-between;
-    width: calc(70vw + 4rem);
-}
-
-.progress-bar-label {
+.color-grey {
     color: grey;
 }
 
+.text-align-center {
+    text-align: center;
+}
+
 #progress-bar-container {
-    width: 70vw;
+    width: calc(70vw + 4rem);
+}
+
+.width-inherit {
+    width: inherit;
+}
+
+.container-space-between-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.container-align-end {
+    display: flex;
+    align-items: end;
 }
 
 #progress-bar {
-    width: inherit;
+    width: 70vw;
     height: 20px;
     position: relative;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
+    align-items: normal;
 }
 
-#markers {
-    display: flex;
-    justify-content: space-between;
+#progress-bar-marker-container {
     position: absolute;
     z-index: 2;
-    width: inherit;
 }
 
-.marker {
+.progress-bar-marker {
     height: 20px;
     width: 3px;
     background-color: grey;
 }
 
 #bar {
-    width: inherit;
     height: 5px;
     background-color: lightgrey;
 }
 
-#progress {
+#progress-container {
     position: absolute;
     display: flex;
     align-items: center;
-    width: inherit;
 }
 
-#progresses-bar {
+.bg-color-black {
+    background-color: rgb(0, 0, 0);
+}
+
+#progress {
     height: 5px;
     width: 0%;
-    background-color: rgb(0, 0, 0);
 }
 
-#progresses-bar-marker {
-    background-color: rgb(0, 0, 0);
+#progress-marker {
     width: 3px;
     height: 10px;
 }
 
-#progresses-bar-label {
+#progress-marker-label-container {
     display: flex;
     flex-direction: column;
     align-items: end;
@@ -139,16 +141,8 @@ html, body {
     height: 32px;
 }
 
-#delta-time-label {
-    text-align: center;
-}
-
-#progresses-bar-label div {
+#delta-time-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-#progresses-bar-label p {
-    margin: 0;
 }
