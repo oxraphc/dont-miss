@@ -120,6 +120,7 @@ setInterval(() => {
 // const now = new Date();
 // now.setHours(11);
 // now.setMinutes(31);
+// now.setSeconds(0);
 // console.log("Debug mode active!")
 // setInterval(() => {
 //     if (savedDate !== now.getDate()) {
@@ -264,10 +265,10 @@ locationSelector.addEventListener('change', () => {
 
 function getPrayerTimeDeltaPercent() {
     let useThreshold;
-    if (prayerIndex != 2) {
-        useThreshold = TIME_DELTA_THRESHOLD;
-    } else {
+    if (prayerIndex == 2) {
         useThreshold = DHUHA_TIME_DELTA_THRESHOLD;
+    } else {
+        useThreshold = TIME_DELTA_THRESHOLD;
     }
 
     let percent = rangePercent(useThreshold, prayerTimeDelta, (useThreshold * -1));
@@ -318,9 +319,9 @@ function capitalize(str) {
 
 
 function rangePercent(min, current, max) {
-    const rangeTotal = Math.abs(min) + Math.abs(max);
-    const currentToMinDistance = current + (min * -1);
-    const ones = 100 / rangeTotal;
+    const amountBetweenMinCurrent = (current + (min * -1));
+    const amountBetweenMinMax = max + (min * -1);
+    const ones = 100 / (amountBetweenMinMax === 0 ? 1 : amountBetweenMinMax);
 
     /**
      * Logically, if we just divide 100% with a number, we'll get how
@@ -333,5 +334,5 @@ function rangePercent(min, current, max) {
      * with a number within our 50 to get the percentage.
      */
 
-    return ones * Math.abs(currentToMinDistance);
+    return current === max ? 100 : (ones * amountBetweenMinCurrent);
 }
