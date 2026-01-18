@@ -1,6 +1,6 @@
 const API_BASE_URL = "https://api.myquran.com/v3/sholat/jadwal/"
 const TIME_DELTA_THRESHOLD = 30; // Minutes
-const DHUHA_TIME_DELTA_THRESHOLD = 15; // Minutes
+const SUNRISE_DHUHA_TIME_DELTA_THRESHOLD = 15; // Minutes
 
 const clockElem = document.getElementById('clock');
 const titleElem = document.getElementById('title');
@@ -11,12 +11,15 @@ const progressBar = document.getElementById('progress');
 const progressMarkerLabelContainer = document.getElementById('progress-marker-label-container');
 const deltaTimeContainer = document.getElementById('delta-time-container');
 const locationSelector = document.getElementById('location');
+const progressBarMarkerLabelMin = document.getElementById('progress-bar-marker-min');
+const progressBarMarkerLabelMax = document.getElementById('progress-bar-marker-max');
 
 let savedDate = new Date().getDate();
 let prayerScheduleDownloaded = false;
 let prayerIndex;
 let prayerTimeDelta = 0;
 let selectedLocationIndex = locationSelector.selectedIndex;
+let deltaTimeThresholdInUse = TIME_DELTA_THRESHOLD;
 const prayerSchedule = [];
 // 0- Isya' (yesterday)
 // 1- Fajr
@@ -155,17 +158,24 @@ function updatePrayerIndex(now) {
         const timeDelta = prayerTimeInMinutes - currentTimeInMinutes;
 
         if (timeDelta > 0) {
-            if (i === 3 && timeDelta > DHUHA_TIME_DELTA_THRESHOLD) {
-                prayerIndex = 2;
-                break;
-            }
-            if (timeDelta <= TIME_DELTA_THRESHOLD) {
-                prayerIndex = i;
-                break;
-            }
-            if (timeDelta > TIME_DELTA_THRESHOLD) {
-                prayerIndex = i - 1;
-                break;
+            if (i === 2 || i === 3) {
+                if (timeDelta <= SUNRISE_DHUHA_TIME_DELTA_THRESHOLD) {
+                    prayerIndex = i;
+                    break;
+                }
+                if (timeDelta > SUNRISE_DHUHA_TIME_DELTA_THRESHOLD) {
+                    prayerIndex = i - 1;
+                    break;
+                }
+            } else {
+                if (timeDelta <= TIME_DELTA_THRESHOLD) {
+                    prayerIndex = i;
+                    break;
+                }
+                if (timeDelta > TIME_DELTA_THRESHOLD) {
+                    prayerIndex = i - 1;
+                    break;
+                }
             }
         }
         // When code execution reaches here, it means it is past isha'
@@ -194,6 +204,10 @@ function updateView() {
     prayerNameElem.innerText = capitalize(prayerSchedule[prayerIndex][0]);
     prayerTimeElem.innerText = prayerSchedule[prayerIndex][1];
 
+    updateDeltaTimeThresholdInUse();
+    progressBarMarkerLabelMin.innerText = `-${deltaTimeThresholdInUse} min`;
+    progressBarMarkerLabelMax.innerText = `+${deltaTimeThresholdInUse} min`;
+
     updateTitle();
     updateDeltaTimeLabel();
     updateProgressBar();
@@ -218,7 +232,7 @@ function updateTitle() {
 
 
 function updateDeltaTimeLabel() {
-    if (prayerTimeDelta < -30) {
+    if (prayerTimeDelta <= (deltaTimeThresholdInUse * -1)) {
         deltaTimeElem.innerHTML = '<br><br>' + formatMinutes(prayerTimeDelta) + ' ▶';
     } else {
         deltaTimeElem.innerHTML = '<br>▲<br>' + formatMinutes(prayerTimeDelta);
@@ -226,9 +240,19 @@ function updateDeltaTimeLabel() {
 }
 
 
+function updateDeltaTimeThresholdInUse() {
+    if (prayerIndex === 2 || prayerIndex === 3) {
+        deltaTimeThresholdInUse = SUNRISE_DHUHA_TIME_DELTA_THRESHOLD;
+    } else {
+        deltaTimeThresholdInUse = TIME_DELTA_THRESHOLD;
+    }
+}
+
+
 function updateProgressBar() {
-    // Get progress bar label container offset 
     const progress = getPrayerTimeDeltaPercent();
+
+    // Get progress bar label container offset 
     const containerComputedStyle = window.getComputedStyle(deltaTimeContainer);
     let containerOffset = (parseInt(containerComputedStyle.width, 10) / 2) + 2;
     let centerOffset = -1.5; // To properly center the progress's bar marker when hitting the 50% mark
@@ -264,14 +288,11 @@ locationSelector.addEventListener('change', () => {
 
 
 function getPrayerTimeDeltaPercent() {
-    let useThreshold;
-    if (prayerIndex == 2) {
-        useThreshold = DHUHA_TIME_DELTA_THRESHOLD;
-    } else {
-        useThreshold = TIME_DELTA_THRESHOLD;
-    }
-
-    let percent = rangePercent(useThreshold, prayerTimeDelta, (useThreshold * -1));
+    let percent = rangePercent(
+        deltaTimeThresholdInUse,
+        prayerTimeDelta,
+        (deltaTimeThresholdInUse * -1)
+    );
     
     // Bracket to 100
     if (percent > 100) {
