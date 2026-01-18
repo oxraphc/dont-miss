@@ -102,7 +102,7 @@ async function getPrayerSchedule() {
 getPrayerSchedule();
 
 
-// 1 second update loop
+// Global update loop
 setInterval(() => {
     const now = new Date();
     updateClock(now);
@@ -117,7 +117,7 @@ setInterval(() => {
         updatePrayerTimeDelta(now);
         updateView();
     }
-}, 1000);
+}, 1);
 
 // =================================================== TESTING / DEBUG ONLY
 // const now = new Date();
