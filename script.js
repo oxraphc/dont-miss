@@ -271,20 +271,20 @@ function updateProgressBar() {
 
 // Detect locationSelector change
 locationSelector.addEventListener('change', () => {
+    resetView();
     selectedLocationIndex = locationSelector.selectedIndex;
-    console.log(`Selected location changed to ${locationSelector.value}`);
+    getPrayerSchedule();
+});
 
-    // Reset view while fetching
+
+function resetView() {
     titleElem.innerText = 'ㅤ';
     prayerNameElem.innerText = 'ㅤ';
     prayerTimeElem.innerText = 'Fetching schedule...';
     deltaTimeElem.innerText = '';
     progressBar.style.width = '0';
     progressMarkerLabelContainer.style.width = '0';
-    
-    // Fetch new schedule with new location
-    getPrayerSchedule();
-});
+}
 
 
 function getPrayerTimeDeltaPercent() {
