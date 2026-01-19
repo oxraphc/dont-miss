@@ -21,6 +21,7 @@ let prayerTimeDelta = 0;
 let selectedLocationIndex = locationSelector.selectedIndex;
 let deltaTimeThresholdInUse = TIME_DELTA_THRESHOLD;
 const prayerSchedule = [];
+// Table array, each row goes like: ["<prayer_name>", "<prayer_time>"]
 // 0- Isya' (yesterday)
 // 1- Fajr
 // 2- Sunrise
@@ -40,7 +41,11 @@ const locationID = [
     'bd4c9ab730f5513206b999ec0d90d1fb', // Kota Tangerang
     'cedebb6e872f539bef8c3f919874e9d7', // Kota Bekasi
     '6a9aeddfc689c1d0e3b9ccc3ab651bc5' // Kota Denpasar
-]
+];
+
+
+// Load saved schedule to avoid refetching.
+retrieveStorage();
 
 
 // Fetch and parse prayer schedules
@@ -51,10 +56,10 @@ async function getPrayerSchedule() {
     const useLocationID = locationID[selectedLocationIndex];
 
     const now = new Date();
-    const todayDate = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`; // YYYY-MM-DD
+    const todayDate = formatDate(now);
 
     now.setDate(now.getDate() - 1); // Rewind date by 1 day
-    const yesterdayDate = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`; // YYYY-MM-DD
+    const yesterdayDate = formatDate(now);
 
     // Fetch and parse yesterday's schedule
     try {
@@ -63,7 +68,7 @@ async function getPrayerSchedule() {
             const jsonResponse = await response.json();
             const jadwal = jsonResponse['data']['jadwal'][yesterdayDate];
             prayerSchedule.push(
-                ['isha\'', jadwal['isya']] // We only need yesterday's isha time
+                ['isha\' (yesterday)', jadwal['isya']] // We only need yesterday's isha time
             )
         } else {
             throw new Error(`Failed to fetch yesterday prayer schedule (${response.status})`);
@@ -97,9 +102,9 @@ async function getPrayerSchedule() {
     }
 
     prayerScheduleDownloaded = true;
-    console.log("New schedule fetched and parsed.")
+    updateStorage();
+    console.log("New schedule fetched, parsed, and stored.");
 }
-getPrayerSchedule();
 
 
 // Global update loop
@@ -201,7 +206,7 @@ function updatePrayerTimeDelta(now) {
 
 
 function updateView() {
-    prayerNameElem.innerText = capitalize(prayerSchedule[prayerIndex][0]);
+    prayerNameElem.innerText = prayerIndex === 0 ? 'Isha\'' : capitalize(prayerSchedule[prayerIndex][0]);
     prayerTimeElem.innerText = prayerSchedule[prayerIndex][1];
 
     updateDeltaTimeThresholdInUse();
@@ -271,6 +276,7 @@ function updateProgressBar() {
 
 // Detect locationSelector change
 locationSelector.addEventListener('change', () => {
+    console.log(`Location changed to ${locationSelector.value}`)
     resetView();
     selectedLocationIndex = locationSelector.selectedIndex;
     getPrayerSchedule();
@@ -300,6 +306,69 @@ function getPrayerTimeDeltaPercent() {
     }
         
     return percent;
+}
+
+
+function updateStorage() {
+    const schedule = Object.fromEntries(prayerSchedule);
+    localStorage.setItem('schedule', JSON.stringify(schedule));
+    localStorage.setItem('locationIndex', selectedLocationIndex);
+    localStorage.setItem('lastUpdate', formatDate(new Date()));
+    console.log('Storage updated or populated.');
+}
+
+
+function retrieveStorage() {
+    let storageSchedule;
+    let storageLocationIndex;
+    let storageLastUpdate;
+
+    try {
+        storageSchedule = localStorage.getItem('schedule');
+        storageLocationIndex = localStorage.getItem('locationIndex');
+        storageLastUpdate = localStorage.getItem('lastUpdate');
+        
+        if (!(storageSchedule && storageLocationIndex && storageLastUpdate)) {
+            throw new Error();
+        }
+        console.log('Saved schedule found.'); // If reaches here, saved storage was found.
+
+        if (storageLastUpdate == formatDate(new Date())) {
+            const storageScheduleParsed = JSON.parse(localStorage.getItem('schedule'));
+            prayerSchedule.push(
+                    ['isha\' (yesterday)', storageScheduleParsed['isha\' (yesterday)']],
+                    ['fajr', storageScheduleParsed['fajr']],
+                    ['sunrise', storageScheduleParsed['sunrise']],
+                    ['dhuha', storageScheduleParsed['dhuha']],
+                    ['dzuhr', storageScheduleParsed['dzuhr']],
+                    ['ashr', storageScheduleParsed['ashr']],
+                    ['maghrib', storageScheduleParsed['maghrib']],
+                    ['isha\'', storageScheduleParsed['isha\'']],
+                )
+
+            selectedLocationIndex = Number(localStorage.getItem('locationIndex'));
+            locationSelector.selectedIndex = selectedLocationIndex;
+            prayerScheduleDownloaded = true;
+            console.log('Prayer schedule and location loaded from storage.');
+
+        } else {
+            console.log('Storage outdated. Updating...');
+            getPrayerSchedule();
+        }
+        
+    } catch {
+        console.log('Storage empty. Populating...');
+        getPrayerSchedule();
+    }
+}
+
+
+function formatDate(now) {
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0')
+    const day = now.getDate().toString().padStart(2, '0')
+    
+    return `${year}-${month}-${day}`;
 }
 
 
