@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://api.myquran.com/v3/sholat/jadwal/"
+const API_BASE_URL = 'https://api.myquran.com/v3/sholat/jadwal/'
 const TIME_DELTA_THRESHOLD = 30; // Minutes
 const SUNRISE_DHUHA_TIME_DELTA_THRESHOLD = 15; // Minutes
 
@@ -21,7 +21,7 @@ let prayerTimeDelta = 0;
 let selectedLocationIndex = locationSelector.selectedIndex;
 let deltaTimeThresholdInUse = TIME_DELTA_THRESHOLD;
 const prayerSchedule = [];
-// Table array, each row goes like: ["<prayer_name>", "<prayer_time>"]
+// Table array, each row goes like: ['<prayer_name>', '<prayer_time>']
 // 0- Isya' (yesterday)
 // 1- Fajr
 // 2- Sunrise
@@ -50,7 +50,7 @@ retrieveStorage();
 
 // Fetch and parse prayer schedules
 async function getPrayerSchedule() {
-    console.log("Fetching new schedule...");
+    console.log('Fetching new schedule...');
     prayerScheduleDownloaded = false;
     resetView();
     prayerSchedule.length = 0; // Clear prayerSchedule array
@@ -104,7 +104,7 @@ async function getPrayerSchedule() {
 
     prayerScheduleDownloaded = true;
     updateStorage();
-    console.log("New schedule fetched, parsed, and stored.");
+    console.log('New schedule fetched, parsed, and stored.');
 }
 
 
@@ -130,7 +130,7 @@ setInterval(() => {
 // now.setHours(11);
 // now.setMinutes(31);
 // now.setSeconds(0);
-// console.log("Debug mode active!")
+// console.log('Debug mode active!')
 // setInterval(() => {
 //     if (savedDate !== now.getDate()) {
 //         savedDate = now.getDate();
@@ -195,7 +195,7 @@ function updatePrayerTimeDelta(now) {
     const currentTimeInMinutes = timeToMinutes(now.getHours(), now.getMinutes());
 
     const prayerTime = prayerSchedule[prayerIndex][1];
-    const t = prayerTime.split(':'); // ["<hours>", "<minutes>"]
+    const t = prayerTime.split(':'); // ['<hours>', '<minutes>']
     const prayerTimeInMinutes = timeToMinutes(t[0], t[1]);
 
     if (prayerIndex === 0) {
@@ -238,8 +238,10 @@ function updateTitle() {
 
 
 function updateDeltaTimeLabel() {
-    if (prayerTimeDelta <= (deltaTimeThresholdInUse * -1)) {
+    if (prayerTimeDelta <= ((deltaTimeThresholdInUse + 1) * -1)) {
         deltaTimeElem.innerHTML = '<br><br>' + formatMinutes(prayerTimeDelta) + ' ▶';
+    } else if (prayerTimeDelta >= (deltaTimeThresholdInUse + 1)) {
+        deltaTimeElem.innerHTML = '<br><br>' + '◀ ' + formatMinutes(prayerTimeDelta);
     } else {
         deltaTimeElem.innerHTML = '<br>▲<br>' + formatMinutes(prayerTimeDelta);
     }
@@ -256,22 +258,32 @@ function updateDeltaTimeThresholdInUse() {
 
 
 function updateProgressBar() {
-    const progress = getPrayerTimeDeltaPercent();
-
     // Get progress bar label container offset 
     const containerComputedStyle = window.getComputedStyle(deltaTimeContainer);
     let containerOffset = (parseInt(containerComputedStyle.width, 10) / 2) + 2;
-    let centerOffset = -1.5; // To properly center the progress's bar marker when hitting the 50% mark
+    let centerOffset = -1.2; // Properly center the progress's bar marker when hitting the 50% mark
     
-    if (progress >= 100) {
-        // Omit any offsets if full progress
+    if (prayerTimeDelta < (deltaTimeThresholdInUse * -1)) {
+        // Omit all offset if progress > 100%
+        setContainerAlign(progressMarkerLabelContainer, 'end');
         centerOffset = 0;
         containerOffset = 0;
+        
+    } else if (prayerTimeDelta > deltaTimeThresholdInUse) {
+        // Omit all offset if progress < 0%
+        setContainerAlign(progressMarkerLabelContainer, 'start');
+        centerOffset = 0;
+        containerOffset = 0;
+
+    } else {
+        // Default
+        setContainerAlign(progressMarkerLabelContainer, 'end');
     }
     
     // Update progress bar and label position
+    const progress = getPrayerTimeDeltaPercent();
     progressBar.style.width = `calc(${progress}% + ${centerOffset}px)`;
-    progressMarkerLabelContainer.style.width = `calc(${progress}% + ${containerOffset}px + ${centerOffset}px)`;
+    progressMarkerLabelContainer.style.width = `calc(${(progress < 0) ? 100 : progress}% + ${containerOffset}px + ${centerOffset}px)`;
 }
 
 
@@ -359,6 +371,21 @@ function retrieveStorage() {
     } catch {
         console.log('Storage empty. Populating...');
         getPrayerSchedule();
+    }
+}
+
+
+function setContainerAlign(container, align) {
+    switch (align) {
+        case 'start':
+            container.classList.remove('container-align-end');
+            container.classList.add('container-align-start');
+            break;
+
+        case 'end':
+            container.classList.remove('container-align-start');
+            container.classList.add('container-align-end');
+            break;
     }
 }
 

@@ -75,6 +75,12 @@ html, body {
 }
 
 
+.container-align-start {
+    display: flex;
+    align-items: start;
+}
+
+
 .bg-color-black {
     background-color: rgb(0, 0, 0);
 }
@@ -158,15 +164,7 @@ html, body {
 #progress-marker-label-container {
     display: flex;
     flex-direction: column;
-    align-items: end;
     position: absolute;
     width: 0%;
     height: 32px;
-}
-
-
-#delta-time-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
