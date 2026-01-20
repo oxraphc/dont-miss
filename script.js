@@ -52,6 +52,7 @@ retrieveStorage();
 async function getPrayerSchedule() {
     console.log("Fetching new schedule...");
     prayerScheduleDownloaded = false;
+    resetView();
     prayerSchedule.length = 0; // Clear prayerSchedule array
     const useLocationID = locationID[selectedLocationIndex];
 
@@ -276,8 +277,7 @@ function updateProgressBar() {
 
 // Detect locationSelector change
 locationSelector.addEventListener('change', () => {
-    console.log(`Location changed to ${locationSelector.value}`)
-    resetView();
+    console.log(`Location changed to ${locationSelector.value}`);
     selectedLocationIndex = locationSelector.selectedIndex;
     getPrayerSchedule();
 });
