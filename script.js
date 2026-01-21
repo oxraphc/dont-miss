@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://api.myquran.com/v3/sholat/jadwal/'
+const API_BASE_URL = 'https://api.myquran.com/v3/sholat/jadwal/';
 const TIME_DELTA_THRESHOLD = 30; // Minutes
 const SUNRISE_DHUHA_TIME_DELTA_THRESHOLD = 15; // Minutes
 
@@ -70,7 +70,7 @@ async function getPrayerSchedule() {
             const jadwal = jsonResponse['data']['jadwal'][yesterdayDate];
             prayerSchedule.push(
                 ['isha\' (yesterday)', jadwal['isya']] // We only need yesterday's isha time
-            )
+            );
         } else {
             throw new Error(`Failed to fetch yesterday prayer schedule (${response.status})`);
         }
@@ -92,8 +92,8 @@ async function getPrayerSchedule() {
                 ['dzuhr', jadwal['dzuhur']],
                 ['ashr', jadwal['ashar']],
                 ['maghrib', jadwal['maghrib']],
-                ['isha\'', jadwal['isya']],
-            )
+                ['isha\'', jadwal['isya']]
+            );
         } else {
             throw new Error(`Failed to fetch today prayer schedule (${response.status})`);
         }
@@ -258,28 +258,26 @@ function updateDeltaTimeThresholdInUse() {
 
 
 function updateProgressBar() {
-    // Get progress bar label container offset 
+    // Get progress bar label container offset
     const containerComputedStyle = window.getComputedStyle(deltaTimeContainer);
     let containerOffset = (parseInt(containerComputedStyle.width, 10) / 2) + 2;
     let centerOffset = -1.2; // Properly center the progress's bar marker when hitting the 50% mark
-    
+
     if (prayerTimeDelta < (deltaTimeThresholdInUse * -1)) {
         // Omit all offset if progress > 100%
         setContainerAlign(progressMarkerLabelContainer, 'end');
         centerOffset = 0;
         containerOffset = 0;
-        
     } else if (prayerTimeDelta > deltaTimeThresholdInUse) {
         // Omit all offset if progress < 0%
         setContainerAlign(progressMarkerLabelContainer, 'start');
         centerOffset = 0;
         containerOffset = 0;
-
     } else {
         // Default
         setContainerAlign(progressMarkerLabelContainer, 'end');
     }
-    
+
     // Update progress bar and label position
     const progress = getPrayerTimeDeltaPercent();
     progressBar.style.width = `calc(${progress}% + ${centerOffset}px)`;
@@ -311,12 +309,12 @@ function getPrayerTimeDeltaPercent() {
         prayerTimeDelta,
         (deltaTimeThresholdInUse * -1)
     );
-    
+
     // Bracket to 100
     if (percent > 100) {
         percent = percent - (percent - 100);
     }
-        
+
     return percent;
 }
 
@@ -339,35 +337,33 @@ function retrieveStorage() {
         storageSchedule = localStorage.getItem('schedule');
         storageLocationIndex = localStorage.getItem('locationIndex');
         storageLastUpdate = localStorage.getItem('lastUpdate');
-        
+
         if (!(storageSchedule && storageLocationIndex && storageLastUpdate)) {
             throw new Error();
         }
         console.log('Saved schedule found.'); // If reaches here, saved storage was found.
 
-        if (storageLastUpdate == formatDate(new Date())) {
+        if (storageLastUpdate === formatDate(new Date())) {
             const storageScheduleParsed = JSON.parse(localStorage.getItem('schedule'));
             prayerSchedule.push(
-                    ['isha\' (yesterday)', storageScheduleParsed['isha\' (yesterday)']],
-                    ['fajr', storageScheduleParsed['fajr']],
-                    ['sunrise', storageScheduleParsed['sunrise']],
-                    ['dhuha', storageScheduleParsed['dhuha']],
-                    ['dzuhr', storageScheduleParsed['dzuhr']],
-                    ['ashr', storageScheduleParsed['ashr']],
-                    ['maghrib', storageScheduleParsed['maghrib']],
-                    ['isha\'', storageScheduleParsed['isha\'']],
-                )
+                ['isha\' (yesterday)', storageScheduleParsed['isha\' (yesterday)']],
+                ['fajr', storageScheduleParsed['fajr']],
+                ['sunrise', storageScheduleParsed['sunrise']],
+                ['dhuha', storageScheduleParsed['dhuha']],
+                ['dzuhr', storageScheduleParsed['dzuhr']],
+                ['ashr', storageScheduleParsed['ashr']],
+                ['maghrib', storageScheduleParsed['maghrib']],
+                ['isha\'', storageScheduleParsed['isha\'']]
+            );
 
             selectedLocationIndex = Number(localStorage.getItem('locationIndex'));
             locationSelector.selectedIndex = selectedLocationIndex;
             prayerScheduleDownloaded = true;
             console.log('Prayer schedule and location loaded from storage.');
-
         } else {
             console.log('Storage outdated. Updating...');
             getPrayerSchedule();
         }
-        
     } catch {
         console.log('Storage empty. Populating...');
         getPrayerSchedule();
@@ -392,9 +388,9 @@ function setContainerAlign(container, align) {
 
 function formatDate(now) {
     const year = now.getFullYear();
-    const month = (now.getMonth() + 1).toString().padStart(2, '0')
-    const day = now.getDate().toString().padStart(2, '0')
-    
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const day = now.getDate().toString().padStart(2, '0');
+
     return `${year}-${month}-${day}`;
 }
 
@@ -407,7 +403,7 @@ function formatMinutes(minutes) {
     const m = Math.abs(minutes) % 60;
     const h = (Math.abs(minutes) - m) / 60;
     let prefix = '-';
-    let s = [];
+    const s = [];
 
     if (minutes < 0) {
         prefix = '+';
@@ -443,10 +439,10 @@ function rangePercent(min, current, max) {
     /**
      * Logically, if we just divide 100% with a number, we'll get how
      * many % a one of that number get.
-     * 
+     *
      * For example, if we divide 100% with 50, we'll get that each 1's
      * of our 50 took each 2% of the 100%
-     * 
+     *
      * Therefore, we could just multiply how many 1's took of the 100%
      * with a number within our 50 to get the percentage.
      */
