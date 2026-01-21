@@ -54,6 +54,7 @@ retrieveStorage();
 // Fetch and parse prayer schedules
 async function getPrayerSchedule() {
     console.log('Fetching new schedule...');
+    prayerIndexSkipped = false;
     prayerScheduleDownloaded = false;
     resetView();
     prayerSchedule.length = 0; // Clear prayerSchedule array
@@ -308,6 +309,7 @@ function resetView() {
     deltaTimeElem.innerText = '';
     progressBar.style.width = '0';
     progressMarkerLabelContainer.style.width = '0';
+    nextPreviousButtonContainer.classList.add('hidden');
 }
 
 
