@@ -102,6 +102,10 @@ button {
 }
 
 
+.smoothed-transition {
+    transition: all 1s ease-out;
+}
+
 
 #top-bar {
     position: absolute;

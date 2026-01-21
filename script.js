@@ -419,7 +419,7 @@ function formatDate(now) {
 
 function formatMinutes(minutes) {
     if (!minutes) {
-        return 'Now';
+        return 'ㅤNowㅤ';
     }
 
     const m = Math.abs(minutes) % 60;
