@@ -265,17 +265,17 @@ function updateProgressBar() {
 
     if (prayerTimeDelta < (deltaTimeThresholdInUse * -1)) {
         // Omit all offset if progress > 100%
-        setContainerAlign(progressMarkerLabelContainer, 'end');
+        progressMarkerLabelContainer.classList.replace('container-align-start', 'container-align-end');
         centerOffset = 0;
         containerOffset = 0;
     } else if (prayerTimeDelta > deltaTimeThresholdInUse) {
         // Omit all offset if progress < 0%
-        setContainerAlign(progressMarkerLabelContainer, 'start');
+        progressMarkerLabelContainer.classList.replace('container-align-end', 'container-align-start');
         centerOffset = 0;
         containerOffset = 0;
     } else {
         // Default
-        setContainerAlign(progressMarkerLabelContainer, 'end');
+        progressMarkerLabelContainer.classList.replace('container-align-start', 'container-align-end');
     }
 
     // Update progress bar and label position
@@ -367,21 +367,6 @@ function retrieveStorage() {
     } catch {
         console.log('Storage empty. Populating...');
         getPrayerSchedule();
-    }
-}
-
-
-function setContainerAlign(container, align) {
-    switch (align) {
-        case 'start':
-            container.classList.remove('container-align-end');
-            container.classList.add('container-align-start');
-            break;
-
-        case 'end':
-            container.classList.remove('container-align-start');
-            container.classList.add('container-align-end');
-            break;
     }
 }
 
