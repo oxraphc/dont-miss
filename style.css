@@ -4,6 +4,10 @@ html, body {
     /* overflow-x: hidden; */
 }
 
+button {
+    font-family: 'Fragment Mono', monospace;
+}
+
 
 .logo {
     height: calc(1rem + 1vw);
@@ -93,10 +97,14 @@ html, body {
 }
 
 
+.hidden {
+    visibility: hidden;
+}
+
+
+
 #top-bar {
     position: absolute;
-    display: flex;
-    justify-content: space-between;
     width: 100%;
     padding: 3px;
     box-sizing: border-box;
@@ -106,7 +114,7 @@ html, body {
 
 #main {
     position: relative;
-    height: 100vh;
+    height: 90vh;
     width: 100%;
 }
 
@@ -167,4 +175,25 @@ html, body {
     position: absolute;
     width: 0%;
     height: 32px;
+}
+
+
+#next-previous-button-container {
+    position: absolute;
+    top: 80%;
+}
+
+
+#next-previous-button {
+    background-color: white;
+    border: 0px;
+    padding: 0.5rem;
+    text-decoration: underline;
+    user-select: none;
+    font-size: 1rem;
+}
+
+
+#next-previous-button:hover {
+    cursor: pointer;
 }

@@ -13,7 +13,10 @@ const deltaTimeContainer = document.getElementById('delta-time-container');
 const locationSelector = document.getElementById('location');
 const progressBarMarkerLabelMin = document.getElementById('progress-bar-marker-min');
 const progressBarMarkerLabelMax = document.getElementById('progress-bar-marker-max');
+const nextPreviousButtonContainer = document.getElementById('next-previous-button-container');
+const nextPreviousButton = document.getElementById('next-previous-button');
 
+let prayerIndexSkipped = false;
 let savedDate = new Date().getDate();
 let prayerScheduleDownloaded = false;
 let prayerIndex;
@@ -156,6 +159,10 @@ function updateClock(now) {
 
 
 function updatePrayerIndex(now) {
+    if (prayerIndexSkipped) {
+        return;
+    }
+
     const currentTimeInMinutes = timeToMinutes(now.getHours(), now.getMinutes());
 
     for (let i = 1; i < prayerSchedule.length; i++) {
@@ -217,6 +224,7 @@ function updateView() {
     updateTitle();
     updateDeltaTimeLabel();
     updateProgressBar();
+    updateNextPreviousButton();
 }
 
 
@@ -367,6 +375,35 @@ function retrieveStorage() {
     } catch {
         console.log('Storage empty. Populating...');
         getPrayerSchedule();
+    }
+}
+
+
+nextPreviousButton.addEventListener('click', () => {
+    const buttonMode = nextPreviousButton.dataset.mode;
+
+    if (buttonMode === 'next') {
+        prayerIndexSkipped = true;
+        prayerIndex++;
+    } else if (buttonMode === 'previous') {
+        prayerIndexSkipped = false;
+    }
+});
+
+
+function updateNextPreviousButton() {
+    if (prayerTimeDelta <= ((deltaTimeThresholdInUse + 1) * -1)) {
+        if (prayerIndex !== 7) {
+            nextPreviousButtonContainer.classList.remove('hidden');
+            nextPreviousButton.innerText = 'Next prayer ▶';
+            nextPreviousButton.dataset.mode = 'next';
+        }
+    } else if (prayerTimeDelta >= (deltaTimeThresholdInUse + 1)) {
+        nextPreviousButtonContainer.classList.remove('hidden');
+        nextPreviousButton.innerText = '◀ Current prayer';
+        nextPreviousButton.dataset.mode = 'previous';
+    } else {
+        nextPreviousButtonContainer.classList.add('hidden');
     }
 }
 

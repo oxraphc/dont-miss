@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=0">
     <title>don't miss</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Fragment+Mono:ital@0;1&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="top-bar">
+    <div id="top-bar" class="container-space-between-row">
         <div class="container-centered-row container-gap">
             <div class="container-centered-row container-border">
                 <img class="logo" src="assets/svgs/logo.svg">
@@ -63,6 +63,9 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div id="next-previous-button-container" class="hidden">
+            <button id="next-previous-button" data-mode="next">Next prayer ▶</button>
         </div>
     </div>
     <script src="script.js"></script>
