@@ -289,7 +289,7 @@ function updateProgressBar() {
 
     // Update progress bar and label position
     const progress = getPrayerTimeDeltaPercent();
-    progressBar.style.width = `calc(${progress}% + ${centerOffset}px)`;
+    progressBar.style.width = `calc(${(progress < 0) ? 0 : progress}% + ${centerOffset}px)`;
     progressMarkerLabelContainer.style.width = `calc(${(progress < 0) ? 100 : progress}% + ${containerOffset}px + ${centerOffset}px)`;
 }
 
@@ -351,7 +351,7 @@ function retrieveStorage() {
         if (!(storageSchedule && storageLocationIndex && storageLastUpdate)) {
             throw new Error();
         }
-        console.log('Saved schedule found.'); // If reaches here, saved storage was found.
+        console.log('Storage found.'); // If reaches here, saved storage was found.
 
         if (storageLastUpdate === formatDate(new Date())) {
             const storageScheduleParsed = JSON.parse(localStorage.getItem('schedule'));
@@ -421,7 +421,7 @@ function formatDate(now) {
 
 function formatMinutes(minutes) {
     if (!minutes) {
-        return 'ㅤNowㅤ';
+        return 'Now';
     }
 
     const m = Math.abs(minutes) % 60;
