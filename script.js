@@ -211,6 +211,8 @@ function updatePrayerTimeDelta(now) {
     } else {
         prayerTimeDelta = prayerTimeInMinutes - currentTimeInMinutes;
     }
+
+    if (prayerTimeDelta <= 30) prayerIndexSkipped = false; // Release prayerIndex update latch
 }
 
 
