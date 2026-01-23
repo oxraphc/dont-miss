@@ -232,18 +232,10 @@ function updateView() {
 
 
 function updateTitle() {
-    if (prayerIndex !== 2) {
-        if (prayerTimeDelta > 0) {
-            titleElem.innerText = 'Next prayer :';
-        } else if (prayerTimeDelta <= 0) {
-            titleElem.innerText = 'Current prayer :';
-        }
-    } else {
-        if (prayerTimeDelta > 0) {
-            titleElem.innerText = 'Upcoming :';
-        } else if (prayerTimeDelta <= 0) {
-            titleElem.innerText = 'Currently :';
-        }
+    if (prayerTimeDelta > 0) {
+        titleElem.innerText = (prayerIndex === 2) ? 'Upcoming :' : 'Next prayer :';
+    } else if (prayerTimeDelta <= 0) {
+        titleElem.innerText = (prayerIndex === 2) ? 'Currently :' : 'Current prayer :';
     }
 }
 
