@@ -399,12 +399,12 @@ function updateNextPreviousButton() {
     if (prayerTimeDelta <= ((deltaTimeThresholdInUse + 1) * -1)) {
         if (prayerIndex !== 7) {
             nextPreviousButtonContainer.classList.remove('hidden');
-            nextPreviousButton.innerText = 'Next prayer ▶';
+            nextPreviousButton.innerText = (prayerIndex === 1) ? 'Upcoming ▶' : 'Next prayer ▶';
             nextPreviousButton.dataset.mode = 'next';
         }
     } else if (prayerTimeDelta >= (deltaTimeThresholdInUse + 1)) {
         nextPreviousButtonContainer.classList.remove('hidden');
-        nextPreviousButton.innerText = '◀ Current prayer';
+        nextPreviousButton.innerText = (prayerIndex === 3) ? '◀ Currently' : '◀ Current prayer';
         nextPreviousButton.dataset.mode = 'previous';
     } else {
         nextPreviousButtonContainer.classList.add('hidden');
