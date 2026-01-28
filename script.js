@@ -76,10 +76,11 @@ async function getPrayerSchedule() {
                 ['isha\' (yesterday)', jadwal['isya']] // We only need yesterday's isha time
             );
         } else {
-            throw new Error(`Failed to fetch yesterday prayer schedule (${response.status})`);
+            throw new Error(`Failed to fetch yesterday prayer schedule (Code ${response.status})`);
         }
     } catch (e) {
         console.error(e);
+        showErrorToUser(e);
         return;
     }
 
@@ -99,10 +100,11 @@ async function getPrayerSchedule() {
                 ['isha\'', jadwal['isya']]
             );
         } else {
-            throw new Error(`Failed to fetch today prayer schedule (${response.status})`);
+            throw new Error(`Failed to fetch today prayer schedule (Code ${response.status})`);
         }
     } catch (e) {
         console.error(e);
+        showErrorToUser(e);
         return;
     }
 
@@ -372,6 +374,15 @@ function retrieveStorage() {
         console.log('Storage empty. Populating...');
         getPrayerSchedule();
     }
+}
+
+
+function showErrorToUser(error) {
+    const errorMsg = document.createElement('p');
+    errorMsg.innerText = error + '\nTry refreshing.';
+    errorMsg.style.color = 'red';
+    errorMsg.style.margin = '10px';
+    document.body.appendChild(errorMsg);
 }
 
 
