@@ -465,16 +465,5 @@ function rangePercent(min, current, max) {
     const amountBetweenMinMax = max + (min * -1);
     const ones = 100 / (amountBetweenMinMax === 0 ? 1 : amountBetweenMinMax);
 
-    /**
-     * Logically, if we just divide 100% with a number, we'll get how
-     * many % a one of that number get.
-     *
-     * For example, if we divide 100% with 50, we'll get that each 1's
-     * of our 50 took each 2% of the 100%
-     *
-     * Therefore, we could just multiply how many 1's took of the 100%
-     * with a number within our 50 to get the percentage.
-     */
-
     return current === max ? 100 : (ones * amountBetweenMinCurrent);
 }
