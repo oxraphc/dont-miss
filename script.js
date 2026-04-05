@@ -306,6 +306,8 @@ function resetView() {
     progressBar.style.width = '0';
     progressMarkerLabelContainer.style.width = '0';
     nextPreviousButtonContainer.classList.add('hidden');
+    progressBarMarkerLabelMin.innerText = '';
+    progressBarMarkerLabelMax.innerText = '';
 }
 
 
