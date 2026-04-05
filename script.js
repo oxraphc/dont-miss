@@ -21,7 +21,7 @@ let savedDate = new Date().getDate();
 let prayerScheduleDownloaded = false;
 let prayerIndex;
 let prayerTimeDelta = 0;
-let selectedLocationIndex = locationSelector.selectedIndex;
+let selectedLocationIndex = 0;
 let deltaTimeThresholdInUse = TIME_DELTA_THRESHOLD;
 const prayerSchedule = [];
 // Table array, each row goes like: ['<prayer_name>', '<prayer_time>']
@@ -349,6 +349,9 @@ function retrieveStorage() {
         }
         console.log('Storage found.'); // If reaches here, saved storage was found.
 
+        selectedLocationIndex = Number(localStorage.getItem('locationIndex'));
+        locationSelector.selectedIndex = selectedLocationIndex;
+
         if (storageLastUpdate === formatDate(new Date())) {
             const storageScheduleParsed = JSON.parse(localStorage.getItem('schedule'));
             prayerSchedule.push(
@@ -362,10 +365,8 @@ function retrieveStorage() {
                 ['isha\'', storageScheduleParsed['isha\'']]
             );
 
-            selectedLocationIndex = Number(localStorage.getItem('locationIndex'));
-            locationSelector.selectedIndex = selectedLocationIndex;
             prayerScheduleDownloaded = true;
-            console.log('Prayer schedule and location loaded from storage.');
+            console.log('Prayer schedule loaded from storage.');
         } else {
             console.log('Storage outdated. Updating...');
             getPrayerSchedule();
