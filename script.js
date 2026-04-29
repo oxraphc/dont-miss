@@ -10,11 +10,12 @@ const deltaTimeElem = document.getElementById('delta-time');
 const progressBar = document.getElementById('progress');
 const progressMarkerLabelContainer = document.getElementById('progress-marker-label-container');
 const deltaTimeContainer = document.getElementById('delta-time-container');
-const locationSelector = document.getElementById('location');
+// const locationSelector = document.getElementById('location');
 const progressBarMarkerLabelMin = document.getElementById('progress-bar-marker-min');
 const progressBarMarkerLabelMax = document.getElementById('progress-bar-marker-max');
 const nextPreviousButtonContainer = document.getElementById('next-previous-button-container');
 const nextPreviousButton = document.getElementById('next-previous-button');
+const preferencesButton = document.getElementById('preferences-button');
 
 let prayerIndexSkipped = false;
 let savedDate = new Date().getDate();
@@ -291,11 +292,11 @@ function updateProgressBar() {
 
 
 // Detect locationSelector change
-locationSelector.addEventListener('change', () => {
-    console.log(`Location changed to ${locationSelector.value}`);
-    selectedLocationIndex = locationSelector.selectedIndex;
-    getPrayerSchedule();
-});
+// locationSelector.addEventListener('change', () => {
+//     console.log(`Location changed to ${locationSelector.value}`);
+//     selectedLocationIndex = locationSelector.selectedIndex;
+//     getPrayerSchedule();
+// });
 
 
 function resetView() {
@@ -352,7 +353,7 @@ function retrieveStorage() {
         console.log('Storage found.'); // If reaches here, saved storage was found.
 
         selectedLocationIndex = Number(localStorage.getItem('locationIndex'));
-        locationSelector.selectedIndex = selectedLocationIndex;
+        // locationSelector.selectedIndex = selectedLocationIndex;
 
         if (storageLastUpdate === formatDate(new Date())) {
             const storageScheduleParsed = JSON.parse(localStorage.getItem('schedule'));
@@ -416,6 +417,11 @@ function updateNextPreviousButton() {
         nextPreviousButtonContainer.classList.add('hidden');
     }
 }
+
+
+preferencesButton.addEventListener('click', () => {
+    console.log('button works :) 👍');
+});
 
 
 function formatDate(now) {

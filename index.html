@@ -8,28 +8,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fragment+Mono:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
     <div id="top-bar" class="container-space-between-row">
-        <div class="container-centered-row container-gap">
+        <div class="explicit-flex container-gap">
             <div class="container-centered-row container-border">
                 <img class="logo" src="assets/svgs/logo.svg" draggable="false">
             </div>
-            <div>
-                <label for="location">Location:</label>
-                <select id="location">
-                    <option value="tulungagung">Tulungagung</option>
-                    <option value="kediri">Kediri</option>
-                    <option value="surabaya">Surabaya</option>
-                    <option value="malang">Malang</option>
-                    <option value="jogja">Jogja</option>
-                    <option value="semarang">Semarang</option>
-                    <option value="jakarta">Jakarta</option>
-                    <option value="tangerang">Tangerang</option>
-                    <option value="bekasi">Bekasi</option>
-                    <option value="denpasar">Denpasar</option>
-                </select>
-            </div>
+            <button id="preferences-button" class="button square-aspect">
+                <i class="fa fa-gear"></i>
+            </button>
         </div>
         <div class="container-centered-row container-border">
             <p id="clock" class="no-margin">XX:XX:XX</p>
