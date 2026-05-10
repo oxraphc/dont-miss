@@ -17,6 +17,7 @@ const nextPreviousButton = document.getElementById('next-previous-button');
 const openPreferencesButton = document.getElementById('preferences-button');
 const closePreferencesButton = document.getElementById('close-pref-menu');
 const preferencesMenuScreen = document.getElementById('preferences-menu-screen');
+const locationSelector = document.getElementById('location');
 
 let prayerIndexSkipped = false;
 let savedDate = new Date().getDate();
@@ -416,8 +417,16 @@ openPreferencesButton.addEventListener('click', () => {
     preferencesMenuScreen.classList.remove('hidden');
 });
 
+
 closePreferencesButton.addEventListener('click', () => {
     preferencesMenuScreen.classList.add('hidden');
+});
+
+
+locationSelector.addEventListener('change', () => {
+    console.log(`Location changed to ${locationSelector.value}`);
+    selectedLocationIndex = locationSelector.selectedIndex;
+    getPrayerSchedule();
 });
 
 
