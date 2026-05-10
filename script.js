@@ -10,12 +10,13 @@ const deltaTimeElem = document.getElementById('delta-time');
 const progressBar = document.getElementById('progress');
 const progressMarkerLabelContainer = document.getElementById('progress-marker-label-container');
 const deltaTimeContainer = document.getElementById('delta-time-container');
-// const locationSelector = document.getElementById('location');
 const progressBarMarkerLabelMin = document.getElementById('progress-bar-marker-min');
 const progressBarMarkerLabelMax = document.getElementById('progress-bar-marker-max');
 const nextPreviousButtonContainer = document.getElementById('next-previous-button-container');
 const nextPreviousButton = document.getElementById('next-previous-button');
-const preferencesButton = document.getElementById('preferences-button');
+const openPreferencesButton = document.getElementById('preferences-button');
+const closePreferencesButton = document.getElementById('close-pref-menu');
+const preferencesMenuScreen = document.getElementById('preferences-menu-screen');
 
 let prayerIndexSkipped = false;
 let savedDate = new Date().getDate();
@@ -291,14 +292,6 @@ function updateProgressBar() {
 }
 
 
-// Detect locationSelector change
-// locationSelector.addEventListener('change', () => {
-//     console.log(`Location changed to ${locationSelector.value}`);
-//     selectedLocationIndex = locationSelector.selectedIndex;
-//     getPrayerSchedule();
-// });
-
-
 function resetView() {
     titleElem.innerText = 'ㅤ';
     prayerNameElem.innerText = 'ㅤ';
@@ -419,8 +412,12 @@ function updateNextPreviousButton() {
 }
 
 
-preferencesButton.addEventListener('click', () => {
-    console.log('button works :) 👍');
+openPreferencesButton.addEventListener('click', () => {
+    preferencesMenuScreen.classList.remove('hidden');
+});
+
+closePreferencesButton.addEventListener('click', () => {
+    preferencesMenuScreen.classList.add('hidden');
 });
 
 

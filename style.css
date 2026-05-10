@@ -185,6 +185,11 @@ select {
 }
 
 
+.pointer-hover:hover {
+    cursor: pointer;
+}
+
+
 @media (width <= 37rem) {
     .preferences-option {
         flex-direction: column;
@@ -288,11 +293,6 @@ select {
     padding: 0.5rem;
     text-decoration: underline;
     font-size: 1rem;
-}
-
-
-#next-previous-button:hover {
-    cursor: pointer;
 }
 
 
