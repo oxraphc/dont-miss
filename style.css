@@ -79,6 +79,13 @@ select {
 }
 
 
+.container-centered-space-between-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
 .container-align-end {
     display: flex;
     align-items: end;
@@ -187,6 +194,26 @@ select {
 
 .pointer-hover:hover {
     cursor: pointer;
+}
+
+
+.loader {
+    height: 1rem;
+    aspect-ratio: 1/1;
+    border: 2px solid black;
+    border-bottom-color: white;
+    border-radius: 50%;
+    animation: rotation 0.5s linear infinite;
+}
+
+
+@keyframes rotation {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 

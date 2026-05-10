@@ -18,6 +18,12 @@ const openPreferencesButton = document.getElementById('preferences-button');
 const closePreferencesButton = document.getElementById('close-pref-menu');
 const preferencesMenuScreen = document.getElementById('preferences-menu-screen');
 const locationSelector = document.getElementById('location');
+const locationLoaderAnimElem = document.getElementById('location-loader');
+// const langLoaderAnimElem = document.getElementById('lang-loader');
+// const themeLoaderAnimElem = document.getElementById('theme-loader');
+// const delayLoaderAnimElem = document.getElementById('delay-loader');
+// const detailedTextsModeLoaderAnimElem = document.getElementById('detailed-texts-mode-loader');
+// const showIconsLoaderAnimElem = document.getElementById('show-icons-loader');
 
 let prayerIndexSkipped = false;
 let savedDate = new Date().getDate();
@@ -113,6 +119,7 @@ async function getPrayerSchedule() {
 
     prayerScheduleDownloaded = true;
     updateStorage();
+    locationLoaderAnimElem.classList.add('hidden');
     console.log('New schedule fetched, parsed, and stored.');
 }
 
@@ -347,7 +354,7 @@ function retrieveStorage() {
         console.log('Storage found.'); // If reaches here, saved storage was found.
 
         selectedLocationIndex = Number(localStorage.getItem('locationIndex'));
-        // locationSelector.selectedIndex = selectedLocationIndex;
+        locationSelector.selectedIndex = selectedLocationIndex;
 
         if (storageLastUpdate === formatDate(new Date())) {
             const storageScheduleParsed = JSON.parse(localStorage.getItem('schedule'));
@@ -424,6 +431,7 @@ closePreferencesButton.addEventListener('click', () => {
 
 
 locationSelector.addEventListener('change', () => {
+    locationLoaderAnimElem.classList.remove('hidden');
     console.log(`Location changed to ${locationSelector.value}`);
     selectedLocationIndex = locationSelector.selectedIndex;
     getPrayerSchedule();

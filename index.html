@@ -68,62 +68,80 @@
             <div class="preferences-options no-scrollbar">
                 <div class="preferences-option">
                     <p class="nowrap no-margin">Location</p>
-                    <select id="location" class="pointer-hover">
-                        <option value="tulungagung">Tulungagung</option>
-                        <option value="kediri">Kediri</option>
-                        <option value="surabaya">Surabaya</option>
-                        <option value="malang">Malang</option>
-                        <option value="jogja">Jogja</option>
-                        <option value="semarang">Semarang</option>
-                        <option value="jakarta">Jakarta</option>
-                        <option value="tangerang">Tangerang</option>
-                        <option value="bekasi">Bekasi</option>
-                        <option value="denpasar">Denpasar</option>
-                    </select>
+                    <div class="container-centered-space-between-row container-gap">
+                        <div id="location-loader" class="loader hidden"></div>
+                        <select id="location" class="pointer-hover">
+                            <option value="tulungagung">Tulungagung</option>
+                            <option value="kediri">Kediri</option>
+                            <option value="surabaya">Surabaya</option>
+                            <option value="malang">Malang</option>
+                            <option value="jogja">Jogja</option>
+                            <option value="semarang">Semarang</option>
+                            <option value="jakarta">Jakarta</option>
+                            <option value="tangerang">Tangerang</option>
+                            <option value="bekasi">Bekasi</option>
+                            <option value="denpasar">Denpasar</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="preferences-option">
                     <p class="nowrap no-margin">Language</p>
-                    <select id="lang" class="pointer-hover">
-                        <option value="en">English</option>
-                        <option value="id">Indonesia</option>
-                    </select>
+                    <div class="container-centered-space-between-row container-gap">
+                        <div id="lang-loader" class="loader hidden"></div>
+                        <select id="lang" class="pointer-hover">
+                            <option value="en">English</option>
+                            <option value="id">Indonesia</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="preferences-option">
                     <p class="nowrap no-margin">Theme</p>
-                    <select id="theme" class="pointer-hover">
-                        <option value="light">Dzuhr Light</option>
-                        <option value="dark">Tahajjud Dark</option>
-                    </select>
+                    <div class="container-centered-space-between-row container-gap">
+                        <div id="theme-loader" class="loader hidden"></div>
+                        <select id="theme" class="pointer-hover">
+                            <option value="light">Dzuhr Light</option>
+                            <option value="dark">Tahajjud Dark</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="preferences-option">
                     <p class="nowrap no-margin">Prayer Time Adjustment</p>
-                    <select id="delay" class="pointer-hover">
-                        <option value="neg-5">-5 min earlier</option>
-                        <option value="neg-4">-4 min earlier</option>
-                        <option value="neg-3">-3 min earlier</option>
-                        <option value="neg-2">-2 min earlier</option>
-                        <option value="neg-1">-1 min earlier</option>
-                        <option value="zero" selected>No adjustment</option>
-                        <option value="pos-1">+1 min later</option>
-                        <option value="pos-2">+2 min later</option>
-                        <option value="pos-3">+3 min later</option>
-                        <option value="pos-4">+4 min later</option>
-                        <option value="pos-5">+5 min later</option>
-                    </select>
+                    <div class="container-centered-space-between-row container-gap">
+                        <div id="delay-loader" class="loader hidden"></div>
+                        <select id="delay" class="pointer-hover">
+                            <option value="neg-5">-5 min earlier</option>
+                            <option value="neg-4">-4 min earlier</option>
+                            <option value="neg-3">-3 min earlier</option>
+                            <option value="neg-2">-2 min earlier</option>
+                            <option value="neg-1">-1 min earlier</option>
+                            <option value="zero" selected>No adjustment</option>
+                            <option value="pos-1">+1 min later</option>
+                            <option value="pos-2">+2 min later</option>
+                            <option value="pos-3">+3 min later</option>
+                            <option value="pos-4">+4 min later</option>
+                            <option value="pos-5">+5 min later</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="preferences-option">
                     <p class="nowrap no-margin">Detailed Texts</p>
-                    <label class="nowrap no-select pointer-hover">
-                        <input type="checkbox" id="detailed-texts-mode">
-                        Enabled
-                    </label>
+                    <div class="container-centered-space-between-row container-gap">
+                        <div id="detailed-texts-mode-loader" class="loader hidden"></div>
+                        <label class="nowrap no-select pointer-hover">
+                            <input type="checkbox" id="detailed-texts-mode">
+                            Enabled
+                        </label>
+                    </div>
                 </div>
                 <div class="preferences-option">
                     <p class="nowrap no-margin">Icons</p>
-                    <label class="nowarp no-select pointer-hover">
-                        <input type="checkbox" id="show-icons">
-                        Enabled
-                    </label>
+                    <div class="container-centered-space-between-row container-gap">
+                        <div id="show-icons-loader" class="loader hidden"></div>
+                        <label class="nowarp no-select pointer-hover">
+                            <input type="checkbox" id="show-icons">
+                            Enabled
+                        </label>
+                    </div>
                 </div>
             </div>
         </div>
