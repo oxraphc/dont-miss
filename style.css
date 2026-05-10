@@ -8,6 +8,11 @@ button {
     font-family: 'Fragment Mono', monospace;
 }
 
+select {
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    border-radius: 5px;
+    padding: 5px;
+}
 
 .logo {
     height: calc(1rem + 1vw);
@@ -119,6 +124,79 @@ button {
 }
 
 
+.background-white {
+    background-color: white;
+}
+
+
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE, Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera*/
+}
+
+
+.preferences-menu {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    height: 80%;
+    border: 1px solid grey;
+    border-radius: 5px;
+    padding: 1rem 2rem;
+    overflow-y: clip;
+}
+
+
+.preferences-options {
+    overflow-y: scroll;
+}
+
+
+.preferences-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid black;
+}
+
+
+.preferences-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+    padding-bottom: 0.7rem;
+    margin: 1.5rem 0;
+}
+
+
+.nowrap {
+    white-space: nowrap;
+}
+
+
+.no-select {
+    user-select: none;
+}
+
+
+@media (width <= 37rem) {
+    .preferences-option {
+        flex-direction: column;
+        align-items: start;
+    }
+
+    .preferences-option > .no-margin {
+        margin-bottom: 0.5rem;
+    }
+}
+
+
 #top-bar {
     position: absolute;
     width: 100%;
@@ -206,11 +284,9 @@ button {
 
 
 #next-previous-button {
-    background-color: white;
     border: 0px;
     padding: 0.5rem;
     text-decoration: underline;
-    user-select: none;
     font-size: 1rem;
 }
 
@@ -224,5 +300,22 @@ button {
     font-size: 1.1rem;
     border: 3px solid black;
     border-radius: 5px;
-    background-color: white;
+}
+
+
+#preferences-menu-screen {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(4px);
+    z-index: 999;
+}
+
+
+#close-pref-menu {
+    font-size: 1.3rem;
+    border: none;
+    border-radius: 5px;
 }
