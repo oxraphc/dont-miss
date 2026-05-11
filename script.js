@@ -122,7 +122,7 @@ async function getPrayerSchedule() {
     }
 
     prayerScheduleDownloaded = true;
-    updateStorage();
+    storeSchedule();
     locationLoaderAnimElem.classList.add('hidden');
     console.log('New schedule fetched, parsed, and stored.');
 }
@@ -333,33 +333,50 @@ function getPrayerTimeDeltaPercent() {
 }
 
 
-function updateStorage() {
+function storeSchedule() {
     const schedule = Object.fromEntries(prayerSchedule);
     localStorage.setItem('schedule', JSON.stringify(schedule));
-    localStorage.setItem('locationIndex', selectedLocationIndex);
     localStorage.setItem('lastUpdate', formatDate(new Date()));
-    console.log('Storage updated or populated.');
+    console.log('Schedule stored.');
 }
 
 
 function retrieveStorage() {
+    retrieveStoredPreferences();
+    retrieveStoredSchedule();
+}
+
+
+function retrieveStoredPreferences() {
+    const storageLocationIndex = localStorage.getItem('locationIndex');
+    const storageLanguage = localStorage.getItem('language');
+
+    if (!storageLocationIndex) {
+        localStorage.setItem('locationIndex', selectedLocationIndex);
+    }
+    selectedLocationIndex = Number(localStorage.getItem('locationIndex'));
+    locationSelector.selectedIndex = selectedLocationIndex;
+
+    if (!storageLanguage) {
+        localStorage.setItem('language', 'en');
+    }
+    languageSelector.value = localStorage.getItem('language');
     loadLanguage(languageSelector.value);
+}
+
+
+function retrieveStoredSchedule() {
     let storageSchedule;
-    let storageLocationIndex;
     let storageLastUpdate;
 
     try {
         storageSchedule = localStorage.getItem('schedule');
-        storageLocationIndex = localStorage.getItem('locationIndex');
         storageLastUpdate = localStorage.getItem('lastUpdate');
 
-        if (!(storageSchedule && storageLocationIndex && storageLastUpdate)) {
+        if (!(storageSchedule && storageLastUpdate)) {
             throw new Error();
         }
-        console.log('Storage found.'); // If reaches here, saved storage was found.
-
-        selectedLocationIndex = Number(localStorage.getItem('locationIndex'));
-        locationSelector.selectedIndex = selectedLocationIndex;
+        console.log('Stored schedule found.'); // found if reaches here.
 
         if (storageLastUpdate === formatDate(new Date())) {
             const storageScheduleParsed = JSON.parse(localStorage.getItem('schedule'));
@@ -377,11 +394,11 @@ function retrieveStorage() {
             prayerScheduleDownloaded = true;
             console.log('Prayer schedule loaded from storage.');
         } else {
-            console.log('Storage outdated. Updating...');
+            console.log('Stored schedule outdated. Updating...');
             getPrayerSchedule();
         }
     } catch {
-        console.log('Storage empty. Populating...');
+        console.log('No stored schedule found. Fetching...');
         getPrayerSchedule();
     }
 }
@@ -438,6 +455,7 @@ closePreferencesButton.addEventListener('click', () => {
 locationSelector.addEventListener('change', () => {
     locationLoaderAnimElem.classList.remove('hidden');
     selectedLocationIndex = locationSelector.selectedIndex;
+    localStorage.setItem('locationIndex', selectedLocationIndex);
     console.log(`Location changed to ${locationSelector.value}`);
     getPrayerSchedule();
 });
@@ -447,6 +465,7 @@ languageSelector.addEventListener('change', () => {
     langLoaderAnimElem.classList.remove('hidden');
     loadLanguage(languageSelector.value);
     console.log(`Language changed to ${languageSelector.value}`);
+    localStorage.setItem('language', languageSelector.value);
 
     // Effect's purely for UX
     setTimeout(() => {
