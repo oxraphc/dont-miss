@@ -22,7 +22,7 @@ const preferencesMenuScreen = document.getElementById('preferences-menu-screen')
 const locationSelector = document.getElementById('location');
 const languageSelector = document.getElementById('lang');
 const locationLoaderAnimElem = document.getElementById('location-loader');
-// const langLoaderAnimElem = document.getElementById('lang-loader');
+const langLoaderAnimElem = document.getElementById('lang-loader');
 // const themeLoaderAnimElem = document.getElementById('theme-loader');
 // const delayLoaderAnimElem = document.getElementById('delay-loader');
 // const detailedTextsModeLoaderAnimElem = document.getElementById('detailed-texts-mode-loader');
@@ -437,9 +437,21 @@ closePreferencesButton.addEventListener('click', () => {
 
 locationSelector.addEventListener('change', () => {
     locationLoaderAnimElem.classList.remove('hidden');
-    console.log(`Location changed to ${locationSelector.value}`);
     selectedLocationIndex = locationSelector.selectedIndex;
+    console.log(`Location changed to ${locationSelector.value}`);
     getPrayerSchedule();
+});
+
+
+languageSelector.addEventListener('change', () => {
+    langLoaderAnimElem.classList.remove('hidden');
+    loadLanguage(languageSelector.value);
+    console.log(`Language changed to ${languageSelector.value}`);
+
+    // Effect's purely for UX
+    setTimeout(() => {
+        langLoaderAnimElem.classList.add('hidden');
+    }, 200);
 });
 
 
