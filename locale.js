@@ -5,6 +5,9 @@ export function loadLanguage(lang) {
         case 'en':
             language = english;
             break;
+        case 'id':
+            language = indonesian;
+            break;
     }
 
     // Change HTML side texts
@@ -74,4 +77,48 @@ const english = {
     preferencesPrayerTimeAdjustmentPos4: '+4 min later',
     preferencesPrayerTimeAdjustmentPos5: '+5 min later',
     preferencesEnabled: 'Enabled'
+};
+
+const indonesian = {
+    miscFetchingSchedule: 'Mengambil jadwal...',
+    errorTryRefresh: 'Cobalah refresh.',
+    prayerFajr: 'Subuh',
+    prayerSunrise: 'Terbit',
+    prayerDhuha: 'Dhuha',
+    prayerDzuhr: 'Dzuhur',
+    prayerAshr: 'Ashar',
+    prayerMaghrib: 'Maghrib',
+    prayerIsha: 'Isya\'',
+    progressBarMin: 'mnt',
+    progressBarHr: 'jm',
+    progressBarNow: 'Sekarang',
+    titleUpcoming: 'Mendatang',
+    titleNextPrayer: 'Adzan mendatang :',
+    titleCurrently: 'Saat ini :',
+    titleCurrentPrayer: 'Sholat saat ini :',
+    nextPreviousButtonUpcoming: 'Mendatang ▶',
+    nextPreviousButtonNextPrayer: 'Adzan mendatang ▶',
+    nextPreviousButtonCurrently: '◀ Saat ini',
+    nextPreviousButtonCurrentPrayer: '◀ Sholat saat ini',
+    preferencesTitle: 'Preferensi',
+    preferencesOptionLocation: 'Lokasi',
+    preferencesOptionLanguage: 'Bahasa',
+    preferencesOptionTheme: 'Tema',
+    preferencesOptionPrayerTimeAdjustment: 'Penyesuaian Waktu Sholat',
+    preferencesOptionDetailedTexts: 'Teks Mendetail',
+    preferencesOptionIcons: 'Ikon',
+    preferencesThemeLight: 'Terang Dzuhur',
+    preferencesThemeDark: 'Gelap Tahajjud',
+    preferencesPrayerTimeAdjustmentNeg5: '-5 mnt lebih awal',
+    preferencesPrayerTimeAdjustmentNeg4: '-4 mnt lebih awal',
+    preferencesPrayerTimeAdjustmentNeg3: '-3 mnt lebih awal',
+    preferencesPrayerTimeAdjustmentNeg2: '-2 mnt lebih awal',
+    preferencesPrayerTimeAdjustmentNeg1: '-1 mnt lebih awal',
+    preferencesPrayerTimeAdjustmentZero: 'Tidak ada penyesuaian',
+    preferencesPrayerTimeAdjustmentPos1: '+1 mnt lebih telat',
+    preferencesPrayerTimeAdjustmentPos2: '+2 mnt lebih telat',
+    preferencesPrayerTimeAdjustmentPos3: '+3 mnt lebih telat',
+    preferencesPrayerTimeAdjustmentPos4: '+4 mnt lebih telat',
+    preferencesPrayerTimeAdjustmentPos5: '+5 mnt lebih telat',
+    preferencesEnabled: 'Diaktifkan'
 };
