@@ -60,14 +60,14 @@
     <div id="preferences-menu-screen" class="container-centered-row hidden">
         <div class="preferences-menu background-white">
             <div class="preferences-title">
-                <h3>Preferences</h3>
+                <h3 id="locale-preferences-title">Preferences</h3>
                 <button id="close-pref-menu" class="square-aspect background-white pointer-hover">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
             <div class="preferences-options no-scrollbar">
                 <div class="preferences-option">
-                    <p class="nowrap no-margin">Location</p>
+                    <p id="locale-preferences-option-location" class="nowrap no-margin">Location</p>
                     <div class="container-centered-space-between-row container-gap">
                         <div id="location-loader" class="loader hidden"></div>
                         <select id="location" class="pointer-hover">
@@ -85,7 +85,7 @@
                     </div>
                 </div>
                 <div class="preferences-option">
-                    <p class="nowrap no-margin">Language</p>
+                    <p id="locale-preferences-option-language" class="nowrap no-margin">Language</p>
                     <div class="container-centered-space-between-row container-gap">
                         <div id="lang-loader" class="loader hidden"></div>
                         <select id="lang" class="pointer-hover">
@@ -95,49 +95,49 @@
                     </div>
                 </div>
                 <div class="preferences-option">
-                    <p class="nowrap no-margin">Theme</p>
+                    <p id="locale-preferences-option-theme" class="nowrap no-margin">Theme</p>
                     <div class="container-centered-space-between-row container-gap">
                         <div id="theme-loader" class="loader hidden"></div>
                         <select id="theme" class="pointer-hover">
-                            <option value="light">Dzuhr Light</option>
-                            <option value="dark">Tahajjud Dark</option>
+                            <option id="locale-preferences-theme-light" value="light">Dzuhr Light</option>
+                            <option id="locale-preferences-theme-dark" value="dark">Tahajjud Dark</option>
                         </select>
                     </div>
                 </div>
                 <div class="preferences-option">
-                    <p class="nowrap no-margin">Prayer Time Adjustment</p>
+                    <p id="locale-preferences-option-prayer-time-adjustment" class="nowrap no-margin">Prayer Time Adjustment</p>
                     <div class="container-centered-space-between-row container-gap">
                         <div id="delay-loader" class="loader hidden"></div>
                         <select id="delay" class="pointer-hover">
-                            <option value="neg-5">-5 min earlier</option>
-                            <option value="neg-4">-4 min earlier</option>
-                            <option value="neg-3">-3 min earlier</option>
-                            <option value="neg-2">-2 min earlier</option>
-                            <option value="neg-1">-1 min earlier</option>
-                            <option value="zero" selected>No adjustment</option>
-                            <option value="pos-1">+1 min later</option>
-                            <option value="pos-2">+2 min later</option>
-                            <option value="pos-3">+3 min later</option>
-                            <option value="pos-4">+4 min later</option>
-                            <option value="pos-5">+5 min later</option>
+                            <option id="locale-preferences-prayer-time-adjustment-neg-5" value="neg-5">-5 min earlier</option>
+                            <option id="locale-preferences-prayer-time-adjustment-neg-4" value="neg-4">-4 min earlier</option>
+                            <option id="locale-preferences-prayer-time-adjustment-neg-3" value="neg-3">-3 min earlier</option>
+                            <option id="locale-preferences-prayer-time-adjustment-neg-2" value="neg-2">-2 min earlier</option>
+                            <option id="locale-preferences-prayer-time-adjustment-neg-1" value="neg-1">-1 min earlier</option>
+                            <option id="locale-preferences-prayer-time-adjustment-zero" value="zero" selected>No adjustment</option>
+                            <option id="locale-preferences-prayer-time-adjustment-pos-1" value="pos-1">+1 min later</option>
+                            <option id="locale-preferences-prayer-time-adjustment-pos-2" value="pos-2">+2 min later</option>
+                            <option id="locale-preferences-prayer-time-adjustment-pos-3" value="pos-3">+3 min later</option>
+                            <option id="locale-preferences-prayer-time-adjustment-pos-4" value="pos-4">+4 min later</option>
+                            <option id="locale-preferences-prayer-time-adjustment-pos-5" value="pos-5">+5 min later</option>
                         </select>
                     </div>
                 </div>
                 <div class="preferences-option">
-                    <p class="nowrap no-margin">Detailed Texts</p>
+                    <p id="locale-preferences-option-detailed-texts" class="nowrap no-margin">Detailed Texts</p>
                     <div class="container-centered-space-between-row container-gap">
                         <div id="detailed-texts-mode-loader" class="loader hidden"></div>
-                        <label class="nowrap no-select pointer-hover">
+                        <label id="locale-preferences-detailed-texts-enabled" class="nowrap no-select pointer-hover">
                             <input type="checkbox" id="detailed-texts-mode">
                             Enabled
                         </label>
                     </div>
                 </div>
                 <div class="preferences-option">
-                    <p class="nowrap no-margin">Icons</p>
+                    <p id="locale-preferences-option-icons" class="nowrap no-margin">Icons</p>
                     <div class="container-centered-space-between-row container-gap">
                         <div id="show-icons-loader" class="loader hidden"></div>
-                        <label class="nowarp no-select pointer-hover">
+                        <label id="locale-preferences-icons-enabled" class="nowarp no-select pointer-hover">
                             <input type="checkbox" id="show-icons">
                             Enabled
                         </label>
@@ -146,6 +146,6 @@
             </div>
         </div>
     </div>
-    <script src="script.js"></script>
+    <script src="script.js" type="module"></script>
 </body>
 </html>

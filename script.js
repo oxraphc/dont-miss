@@ -1,3 +1,5 @@
+import { loadLanguage, language } from './locale.js';
+
 const API_BASE_URL = 'https://api.myquran.com/v3/sholat/jadwal/';
 const TIME_DELTA_THRESHOLD = 30; // Minutes
 const SUNRISE_DHUHA_TIME_DELTA_THRESHOLD = 15; // Minutes
@@ -18,12 +20,14 @@ const openPreferencesButton = document.getElementById('preferences-button');
 const closePreferencesButton = document.getElementById('close-pref-menu');
 const preferencesMenuScreen = document.getElementById('preferences-menu-screen');
 const locationSelector = document.getElementById('location');
+const languageSelector = document.getElementById('lang');
 const locationLoaderAnimElem = document.getElementById('location-loader');
 // const langLoaderAnimElem = document.getElementById('lang-loader');
 // const themeLoaderAnimElem = document.getElementById('theme-loader');
 // const delayLoaderAnimElem = document.getElementById('delay-loader');
 // const detailedTextsModeLoaderAnimElem = document.getElementById('detailed-texts-mode-loader');
 // const showIconsLoaderAnimElem = document.getElementById('show-icons-loader');
+
 
 let prayerIndexSkipped = false;
 let savedDate = new Date().getDate();
@@ -100,13 +104,13 @@ async function getPrayerSchedule() {
             const jsonResponse = await response.json();
             const jadwal = jsonResponse['data']['jadwal'][todayDate];
             prayerSchedule.push(
-                ['fajr', jadwal['subuh']],
-                ['sunrise', jadwal['terbit']],
-                ['dhuha', jadwal['dhuha']],
-                ['dzuhr', jadwal['dzuhur']],
-                ['ashr', jadwal['ashar']],
-                ['maghrib', jadwal['maghrib']],
-                ['isha\'', jadwal['isya']]
+                ['prayerFajr', jadwal['subuh']],
+                ['prayerSunrise', jadwal['terbit']],
+                ['prayerDhuha', jadwal['dhuha']],
+                ['prayerDzuhr', jadwal['dzuhur']],
+                ['prayerAshr', jadwal['ashar']],
+                ['prayerMaghrib', jadwal['maghrib']],
+                ['prayerIsha', jadwal['isya']]
             );
         } else {
             throw new Error(`Failed to fetch today prayer schedule (Code ${response.status})`);
@@ -229,12 +233,12 @@ function updatePrayerTimeDelta(now) {
 
 
 function updateView() {
-    prayerNameElem.innerText = prayerIndex === 0 ? 'Isha\'' : capitalize(prayerSchedule[prayerIndex][0]);
+    prayerNameElem.innerText = prayerIndex === 0 ? language.prayerIsha : language[prayerSchedule[prayerIndex][0]];
     prayerTimeElem.innerText = prayerSchedule[prayerIndex][1];
 
     updateDeltaTimeThresholdInUse();
-    progressBarMarkerLabelMin.innerText = `-${deltaTimeThresholdInUse} min`;
-    progressBarMarkerLabelMax.innerText = `+${deltaTimeThresholdInUse} min`;
+    progressBarMarkerLabelMin.innerText = `-${deltaTimeThresholdInUse} ${language.progressBarMin}`;
+    progressBarMarkerLabelMax.innerText = `+${deltaTimeThresholdInUse} ${language.progressBarMin}`;
 
     updateTitle();
     updateDeltaTimeLabel();
@@ -245,9 +249,9 @@ function updateView() {
 
 function updateTitle() {
     if (prayerTimeDelta > 0) {
-        titleElem.innerText = (prayerIndex === 2) ? 'Upcoming :' : 'Next prayer :';
+        titleElem.innerText = (prayerIndex === 2) ? language.titleUpcoming : language.titleNextPrayer;
     } else if (prayerTimeDelta <= 0) {
-        titleElem.innerText = (prayerIndex === 2) ? 'Currently :' : 'Current prayer :';
+        titleElem.innerText = (prayerIndex === 2) ? language.titleCurrently : language.titleCurrentPrayer;
     }
 }
 
@@ -303,7 +307,7 @@ function updateProgressBar() {
 function resetView() {
     titleElem.innerText = 'ㅤ';
     prayerNameElem.innerText = 'ㅤ';
-    prayerTimeElem.innerText = 'Fetching schedule...';
+    prayerTimeElem.innerText = language.miscFetchingSchedule;
     deltaTimeElem.innerText = '';
     progressBar.style.width = '0';
     progressMarkerLabelContainer.style.width = '0';
@@ -339,6 +343,7 @@ function updateStorage() {
 
 
 function retrieveStorage() {
+    loadLanguage(languageSelector.value);
     let storageSchedule;
     let storageLocationIndex;
     let storageLastUpdate;
@@ -360,13 +365,13 @@ function retrieveStorage() {
             const storageScheduleParsed = JSON.parse(localStorage.getItem('schedule'));
             prayerSchedule.push(
                 ['isha\' (yesterday)', storageScheduleParsed['isha\' (yesterday)']],
-                ['fajr', storageScheduleParsed['fajr']],
-                ['sunrise', storageScheduleParsed['sunrise']],
-                ['dhuha', storageScheduleParsed['dhuha']],
-                ['dzuhr', storageScheduleParsed['dzuhr']],
-                ['ashr', storageScheduleParsed['ashr']],
-                ['maghrib', storageScheduleParsed['maghrib']],
-                ['isha\'', storageScheduleParsed['isha\'']]
+                ['prayerFajr', storageScheduleParsed['prayerFajr']],
+                ['prayerSunrise', storageScheduleParsed['prayerSunrise']],
+                ['prayerDhuha', storageScheduleParsed['prayerDhuha']],
+                ['prayerDzuhr', storageScheduleParsed['prayerDzuhr']],
+                ['prayerAshr', storageScheduleParsed['prayerAshr']],
+                ['prayerMaghrib', storageScheduleParsed['prayerMaghrib']],
+                ['prayerIsha', storageScheduleParsed['prayerIsha']]
             );
 
             prayerScheduleDownloaded = true;
@@ -384,7 +389,7 @@ function retrieveStorage() {
 
 function showErrorToUser(error) {
     const errorMsg = document.createElement('p');
-    errorMsg.innerText = error + '\nTry refreshing.';
+    errorMsg.innerText = error + '\n' + language.errorTryRefresh;
     errorMsg.style.color = 'red';
     errorMsg.style.margin = '10px';
     document.body.appendChild(errorMsg);
@@ -407,12 +412,12 @@ function updateNextPreviousButton() {
     if (prayerTimeDelta <= ((deltaTimeThresholdInUse + 1) * -1)) {
         if (prayerIndex !== 7) {
             nextPreviousButtonContainer.classList.remove('hidden');
-            nextPreviousButton.innerText = (prayerIndex === 1) ? 'Upcoming ▶' : 'Next prayer ▶';
+            nextPreviousButton.innerText = (prayerIndex === 1) ? language.nextPreviousButtonUpcoming : language.nextPreviousButtonNextPrayer;
             nextPreviousButton.dataset.mode = 'next';
         }
     } else if (prayerTimeDelta >= (deltaTimeThresholdInUse + 1)) {
         nextPreviousButtonContainer.classList.remove('hidden');
-        nextPreviousButton.innerText = (prayerIndex === 3) ? '◀ Currently' : '◀ Current prayer';
+        nextPreviousButton.innerText = (prayerIndex === 3) ? language.nextPreviousButtonCurrently : language.nextPreviousButtonCurrentPrayer;
         nextPreviousButton.dataset.mode = 'previous';
     } else {
         nextPreviousButtonContainer.classList.add('hidden');
@@ -449,7 +454,7 @@ function formatDate(now) {
 
 function formatMinutes(minutes) {
     if (!minutes) {
-        return 'Now';
+        return language.progressBarNow;
     }
 
     const m = Math.abs(minutes) % 60;
@@ -462,11 +467,11 @@ function formatMinutes(minutes) {
     }
 
     if (h > 0) {
-        s.push(`${h} hr`);
+        s.push(`${h} ${language.progressBarHr}`);
     }
 
     if (m > 0) {
-        s.push(`${m} min`);
+        s.push(`${m} ${language.progressBarMin}`);
     }
 
     return prefix + s.join(' ');
@@ -475,11 +480,6 @@ function formatMinutes(minutes) {
 
 function timeToMinutes(hours, minutes) {
     return Number(hours) * 60 + Number(minutes);
-}
-
-
-function capitalize(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1, str.length);
 }
 
 
