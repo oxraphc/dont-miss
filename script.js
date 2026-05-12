@@ -21,9 +21,10 @@ const closePreferencesButton = document.getElementById('close-pref-menu');
 const preferencesMenuScreen = document.getElementById('preferences-menu-screen');
 const locationSelector = document.getElementById('location');
 const languageSelector = document.getElementById('lang');
+const themeSelector = document.getElementById('theme');
 const locationLoaderAnimElem = document.getElementById('location-loader');
 const langLoaderAnimElem = document.getElementById('lang-loader');
-// const themeLoaderAnimElem = document.getElementById('theme-loader');
+const themeLoaderAnimElem = document.getElementById('theme-loader');
 // const delayLoaderAnimElem = document.getElementById('delay-loader');
 // const detailedTextsModeLoaderAnimElem = document.getElementById('detailed-texts-mode-loader');
 // const showIconsLoaderAnimElem = document.getElementById('show-icons-loader');
@@ -350,6 +351,7 @@ function retrieveStorage() {
 function retrieveStoredPreferences() {
     const storageLocationIndex = localStorage.getItem('locationIndex');
     const storageLanguage = localStorage.getItem('language');
+    const storageTheme = localStorage.getItem('theme');
 
     if (!storageLocationIndex) {
         localStorage.setItem('locationIndex', selectedLocationIndex);
@@ -362,6 +364,12 @@ function retrieveStoredPreferences() {
     }
     languageSelector.value = localStorage.getItem('language');
     loadLanguage(languageSelector.value);
+
+    if (!storageTheme) {
+        localStorage.setItem('theme', 'light');
+    }
+    themeSelector.value = localStorage.getItem('theme');
+    changeTheme(themeSelector.value);
 }
 
 
@@ -472,6 +480,32 @@ languageSelector.addEventListener('change', () => {
         langLoaderAnimElem.classList.add('hidden');
     }, 200);
 });
+
+
+themeSelector.addEventListener('change', () => {
+    themeLoaderAnimElem.classList.remove('hidden');
+    changeTheme(themeSelector.value);
+    localStorage.setItem('theme', themeSelector.value);
+
+    // Effect's purely for UX
+    setTimeout(() => {
+        themeLoaderAnimElem.classList.add('hidden');
+    }, 200);
+});
+
+
+function changeTheme(theme) {
+    switch (theme) {
+        case 'light':
+            document.body.classList.remove('dark');
+            document.getElementById('logo').classList.remove('dark');
+            break;
+        case 'dark':
+            document.body.classList.add('dark');
+            document.getElementById('logo').classList.add('dark');
+            break;
+    }
+}
 
 
 function formatDate(now) {
