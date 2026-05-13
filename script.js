@@ -27,8 +27,6 @@ const locationLoaderAnimElem = document.getElementById('location-loader');
 const langLoaderAnimElem = document.getElementById('lang-loader');
 const themeLoaderAnimElem = document.getElementById('theme-loader');
 const adjustmentLoaderAnimElem = document.getElementById('adjustment-loader');
-// const detailedTextsModeLoaderAnimElem = document.getElementById('detailed-texts-mode-loader');
-// const showIconsLoaderAnimElem = document.getElementById('show-icons-loader');
 
 
 let prayerIndexSkipped = false;

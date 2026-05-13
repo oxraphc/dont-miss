@@ -16,8 +16,6 @@ export function loadLanguage(lang) {
     document.getElementById('locale-preferences-option-language').innerText = language.preferencesOptionLanguage;
     document.getElementById('locale-preferences-option-theme').innerText = language.preferencesOptionTheme;
     document.getElementById('locale-preferences-option-prayer-time-adjustment').innerText = language.preferencesOptionPrayerTimeAdjustment;
-    document.getElementById('locale-preferences-option-detailed-texts').innerText = language.preferencesOptionDetailedTexts;
-    document.getElementById('locale-preferences-option-icons').innerText = language.preferencesOptionIcons;
     document.getElementById('locale-preferences-theme-light').text = language.preferencesThemeLight;
     document.getElementById('locale-preferences-theme-dark').text = language.preferencesThemeDark;
     document.getElementById('locale-preferences-prayer-time-adjustment-neg-5').text = language.preferencesPrayerTimeAdjustmentNeg5;
@@ -31,8 +29,6 @@ export function loadLanguage(lang) {
     document.getElementById('locale-preferences-prayer-time-adjustment-pos-3').text = language.preferencesPrayerTimeAdjustmentPos3;
     document.getElementById('locale-preferences-prayer-time-adjustment-pos-4').text = language.preferencesPrayerTimeAdjustmentPos4;
     document.getElementById('locale-preferences-prayer-time-adjustment-pos-5').text = language.preferencesPrayerTimeAdjustmentPos5;
-    document.getElementById('locale-preferences-detailed-texts-enabled').innerHTML = `<input type="checkbox" id="detailed-texts-mode"> ${language.preferencesEnabled}`;
-    document.getElementById('locale-preferences-icons-enabled').innerHTML = `<input type="checkbox" id="show-icons"> ${language.preferencesEnabled}`;
 }
 
 const english = {
@@ -61,8 +57,6 @@ const english = {
     preferencesOptionLanguage: 'Language',
     preferencesOptionTheme: 'Theme',
     preferencesOptionPrayerTimeAdjustment: 'Prayer Time Adjustment',
-    preferencesOptionDetailedTexts: 'Detailed Texts',
-    preferencesOptionIcons: 'Icons',
     preferencesThemeLight: 'Dzuhr Light',
     preferencesThemeDark: 'Tahajjud Dark',
     preferencesPrayerTimeAdjustmentNeg5: '-5 min earlier',
@@ -105,8 +99,6 @@ const indonesian = {
     preferencesOptionLanguage: 'Bahasa',
     preferencesOptionTheme: 'Tema',
     preferencesOptionPrayerTimeAdjustment: 'Penyesuaian Waktu Sholat',
-    preferencesOptionDetailedTexts: 'Teks Mendetail',
-    preferencesOptionIcons: 'Ikon',
     preferencesThemeLight: 'Terang Dzuhur',
     preferencesThemeDark: 'Gelap Tahajjud',
     preferencesPrayerTimeAdjustmentNeg5: '-5 mnt lebih awal',
