@@ -33,11 +33,18 @@ select {
     border: 1px solid var(--color-select-border);
     border-radius: 5px;
     padding: 5px;
+    font-family: 'Fragment Mono', monospace;
+    cursor: pointer;
 }
 
 
 i {
     color: var(--color-foreground);
+}
+
+
+input[type='checkbox'] {
+    cursor: pointer;
 }
 
 
