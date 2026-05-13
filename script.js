@@ -40,6 +40,8 @@ let selectedLocationIndex = 0;
 let deltaTimeThresholdInUse = TIME_DELTA_THRESHOLD;
 let scheduleAdjustment = 0;
 let rawPrayerSchedule;
+let fetchingAnimation;
+let fetchingAnimationStep = 0;
 const prayerSchedule = [];
 // Table array, each row goes like: ['<prayer_name>', '<prayer_time>']
 // 0- Isya' (yesterday)
@@ -74,6 +76,7 @@ async function getPrayerSchedule() {
     prayerIndexSkipped = false;
     prayerScheduleDownloaded = false;
     resetView();
+    startFetchingAnimation();
     rawPrayerSchedule = []; // Clear rawPrayerSchedule array
     const useLocationID = locationID[selectedLocationIndex];
 
@@ -128,6 +131,7 @@ async function getPrayerSchedule() {
     storeSchedule();
     applyScheduleAdjustment(rawPrayerSchedule, scheduleAdjustment);
     locationLoaderAnimElem.classList.add('hidden');
+    stopFetchingAnimation();
     prayerScheduleDownloaded = true;
     console.log('New schedule fetched, parsed, stored, and adjusted.');
 }
@@ -170,6 +174,25 @@ setInterval(() => {
 //     }
 // }, 10);
 //  ========================================================================
+
+
+function startFetchingAnimation() {
+    fetchingAnimation = setInterval(() => {
+        const dot = '.';
+        prayerTimeElem.innerText = language.miscFetchingSchedule + dot.repeat(fetchingAnimationStep);
+
+        if (fetchingAnimationStep < 3) {
+            fetchingAnimationStep++;
+        } else {
+            fetchingAnimationStep = 0;
+        }
+    }, 500);
+}
+
+
+function stopFetchingAnimation() {
+    clearInterval(fetchingAnimation);
+}
 
 
 function updateClock(now) {

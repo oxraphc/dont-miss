@@ -36,7 +36,7 @@ export function loadLanguage(lang) {
 }
 
 const english = {
-    miscFetchingSchedule: 'Fetching Schedule...',
+    miscFetchingSchedule: 'Fetching Schedule',
     errorTryRefresh: 'Try refreshing.',
     prayerFajr: 'Fajr',
     prayerSunrise: 'Sunrise',
@@ -48,7 +48,7 @@ const english = {
     progressBarMin: 'min',
     progressBarHr: 'hr',
     progressBarNow: 'Now',
-    titleUpcoming: 'Upcoming',
+    titleUpcoming: 'Upcoming :',
     titleNextPrayer: 'Next prayer :',
     titleCurrently: 'Currently :',
     titleCurrentPrayer: 'Current prayer :',
@@ -80,7 +80,7 @@ const english = {
 };
 
 const indonesian = {
-    miscFetchingSchedule: 'Mengambil jadwal...',
+    miscFetchingSchedule: 'Mengambil jadwal',
     errorTryRefresh: 'Cobalah refresh.',
     prayerFajr: 'Subuh',
     prayerSunrise: 'Terbit',
@@ -92,7 +92,7 @@ const indonesian = {
     progressBarMin: 'mnt',
     progressBarHr: 'jm',
     progressBarNow: 'Sekarang',
-    titleUpcoming: 'Mendatang',
+    titleUpcoming: 'Mendatang :',
     titleNextPrayer: 'Adzan mendatang :',
     titleCurrently: 'Saat ini :',
     titleCurrentPrayer: 'Sholat saat ini :',
