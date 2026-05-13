@@ -22,10 +22,11 @@ const preferencesMenuScreen = document.getElementById('preferences-menu-screen')
 const locationSelector = document.getElementById('location');
 const languageSelector = document.getElementById('lang');
 const themeSelector = document.getElementById('theme');
+const adjustmentSelector = document.getElementById('adjustment');
 const locationLoaderAnimElem = document.getElementById('location-loader');
 const langLoaderAnimElem = document.getElementById('lang-loader');
 const themeLoaderAnimElem = document.getElementById('theme-loader');
-// const delayLoaderAnimElem = document.getElementById('delay-loader');
+const adjustmentLoaderAnimElem = document.getElementById('adjustment-loader');
 // const detailedTextsModeLoaderAnimElem = document.getElementById('detailed-texts-mode-loader');
 // const showIconsLoaderAnimElem = document.getElementById('show-icons-loader');
 
@@ -37,6 +38,8 @@ let prayerIndex;
 let prayerTimeDelta = 0;
 let selectedLocationIndex = 0;
 let deltaTimeThresholdInUse = TIME_DELTA_THRESHOLD;
+let scheduleAdjustment = 0;
+let rawPrayerSchedule;
 const prayerSchedule = [];
 // Table array, each row goes like: ['<prayer_name>', '<prayer_time>']
 // 0- Isya' (yesterday)
@@ -71,7 +74,7 @@ async function getPrayerSchedule() {
     prayerIndexSkipped = false;
     prayerScheduleDownloaded = false;
     resetView();
-    prayerSchedule.length = 0; // Clear prayerSchedule array
+    rawPrayerSchedule = []; // Clear rawPrayerSchedule array
     const useLocationID = locationID[selectedLocationIndex];
 
     const now = new Date();
@@ -86,7 +89,7 @@ async function getPrayerSchedule() {
         if (response.ok) {
             const jsonResponse = await response.json();
             const jadwal = jsonResponse['data']['jadwal'][yesterdayDate];
-            prayerSchedule.push(
+            rawPrayerSchedule.push(
                 ['isha\' (yesterday)', jadwal['isya']] // We only need yesterday's isha time
             );
         } else {
@@ -104,7 +107,7 @@ async function getPrayerSchedule() {
         if (response.ok) {
             const jsonResponse = await response.json();
             const jadwal = jsonResponse['data']['jadwal'][todayDate];
-            prayerSchedule.push(
+            rawPrayerSchedule.push(
                 ['prayerFajr', jadwal['subuh']],
                 ['prayerSunrise', jadwal['terbit']],
                 ['prayerDhuha', jadwal['dhuha']],
@@ -122,10 +125,11 @@ async function getPrayerSchedule() {
         return;
     }
 
-    prayerScheduleDownloaded = true;
     storeSchedule();
+    applyScheduleAdjustment(rawPrayerSchedule, scheduleAdjustment);
     locationLoaderAnimElem.classList.add('hidden');
-    console.log('New schedule fetched, parsed, and stored.');
+    prayerScheduleDownloaded = true;
+    console.log('New schedule fetched, parsed, stored, and adjusted.');
 }
 
 
@@ -335,10 +339,10 @@ function getPrayerTimeDeltaPercent() {
 
 
 function storeSchedule() {
-    const schedule = Object.fromEntries(prayerSchedule);
+    const schedule = Object.fromEntries(rawPrayerSchedule);
     localStorage.setItem('schedule', JSON.stringify(schedule));
     localStorage.setItem('lastUpdate', formatDate(new Date()));
-    console.log('Schedule stored.');
+    console.log('Raw schedule stored.');
 }
 
 
@@ -352,6 +356,7 @@ function retrieveStoredPreferences() {
     const storageLocationIndex = localStorage.getItem('locationIndex');
     const storageLanguage = localStorage.getItem('language');
     const storageTheme = localStorage.getItem('theme');
+    const storageAdjustment = localStorage.getItem('adjustment');
 
     if (!storageLocationIndex) {
         localStorage.setItem('locationIndex', selectedLocationIndex);
@@ -370,6 +375,12 @@ function retrieveStoredPreferences() {
     }
     themeSelector.value = localStorage.getItem('theme');
     changeTheme(themeSelector.value);
+
+    if (!storageAdjustment) {
+        localStorage.setItem('adjustment', '0');
+    }
+    adjustmentSelector.value = localStorage.getItem('adjustment');
+    scheduleAdjustment = adjustmentSelector.value;
 }
 
 
@@ -384,11 +395,11 @@ function retrieveStoredSchedule() {
         if (!(storageSchedule && storageLastUpdate)) {
             throw new Error();
         }
-        console.log('Stored schedule found.'); // found if reaches here.
+        console.log('Stored schedule found.'); // Found if reaches here.
 
         if (storageLastUpdate === formatDate(new Date())) {
             const storageScheduleParsed = JSON.parse(localStorage.getItem('schedule'));
-            prayerSchedule.push(
+            rawPrayerSchedule.push(
                 ['isha\' (yesterday)', storageScheduleParsed['isha\' (yesterday)']],
                 ['prayerFajr', storageScheduleParsed['prayerFajr']],
                 ['prayerSunrise', storageScheduleParsed['prayerSunrise']],
@@ -399,6 +410,7 @@ function retrieveStoredSchedule() {
                 ['prayerIsha', storageScheduleParsed['prayerIsha']]
             );
 
+            applyScheduleAdjustment(rawPrayerSchedule, scheduleAdjustment);
             prayerScheduleDownloaded = true;
             console.log('Prayer schedule loaded from storage.');
         } else {
@@ -507,6 +519,37 @@ function changeTheme(theme) {
             document.getElementById('logo').classList.add('dark');
             break;
     }
+}
+
+
+adjustmentSelector.addEventListener('change', () => {
+    adjustmentLoaderAnimElem.classList.remove('hidden');
+    scheduleAdjustment = Number(adjustmentSelector.value);
+    applyScheduleAdjustment(rawPrayerSchedule, scheduleAdjustment);
+    localStorage.setItem('adjustment', adjustmentSelector.value);
+
+    // Effect's purely for UX
+    setTimeout(() => {
+        adjustmentLoaderAnimElem.classList.add('hidden');
+    }, 200);
+});
+
+
+function applyScheduleAdjustment(rawSchedule, adjustment) {
+    for (let i = 0; i < rawSchedule.length; i++) {
+        const t = rawSchedule[i][1].split(':');
+        let prayerTimeInMinutes = timeToMinutes(t[0], t[1]);
+        prayerTimeInMinutes += Number(adjustment); // fixme
+        prayerSchedule[i] = [rawSchedule[i][0], minutesToTime(prayerTimeInMinutes)];
+    }
+}
+
+
+function minutesToTime(minutes) {
+    const h = Math.floor(minutes / 60);
+    const m = minutes % 60;
+
+    return [h, m].join(':');
 }
 
 
