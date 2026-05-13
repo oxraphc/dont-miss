@@ -188,6 +188,7 @@ i {
     border-radius: 5px;
     padding: 1rem 2rem;
     overflow-y: clip;
+    transition: transform 150ms ease-out, opacity 150ms ease-out;
 }
 
 
@@ -372,12 +373,7 @@ i {
     width: 100vw;
     height: 100vh;
     z-index: 999;
-    transition: filter 0.5s ease;
-}
-
-
-#preferences-menu-screen:not(.hidden) {
-    backdrop-filter: blur(4px);
+    transition: backdrop-filter 200ms ease-out, visibility 200ms ease-out;
 }
 
 
@@ -385,4 +381,28 @@ i {
     font-size: 1.3rem;
     border: none;
     border-radius: 5px;
+}
+
+
+#preferences-menu-screen.hidden {
+    backdrop-filter: blur(0px);
+    visibility: hidden;
+}
+
+
+#preferences-menu-screen.hidden > .preferences-menu {
+    transform: scale(0.95);
+    opacity: 0;
+}
+
+
+#preferences-menu-screen.shown {
+    backdrop-filter: blur(4px);
+    visibility: visible;
+}
+
+
+#preferences-menu-screen.shown > .preferences-menu {
+    transform: scale(1);
+    opacity: 1;
 }

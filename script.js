@@ -451,11 +451,13 @@ function updateNextPreviousButton() {
 
 
 openPreferencesButton.addEventListener('click', () => {
+    preferencesMenuScreen.classList.add('shown');
     preferencesMenuScreen.classList.remove('hidden');
 });
 
 
 closePreferencesButton.addEventListener('click', () => {
+    preferencesMenuScreen.classList.remove('shown');
     preferencesMenuScreen.classList.add('hidden');
 });
 
