@@ -533,10 +533,12 @@ function changeTheme(theme) {
     switch (theme) {
         case 'light':
             document.body.classList.remove('dark');
+            document.documentElement.classList.remove('dark');
             document.getElementById('logo').classList.remove('dark');
             break;
         case 'dark':
             document.body.classList.add('dark');
+            document.documentElement.classList.add('dark');
             document.getElementById('logo').classList.add('dark');
             break;
     }
