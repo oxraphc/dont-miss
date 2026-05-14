@@ -37,9 +37,9 @@ let prayerTimeDelta = 0;
 let selectedLocationIndex = 0;
 let deltaTimeThresholdInUse = TIME_DELTA_THRESHOLD;
 let scheduleAdjustment = 0;
-let rawPrayerSchedule;
 let fetchingAnimation;
 let fetchingAnimationStep = 0;
+const rawPrayerSchedule = [];
 const prayerSchedule = [];
 // Table array, each row goes like: ['<prayer_name>', '<prayer_time>']
 // 0- Isya' (yesterday)
@@ -75,7 +75,7 @@ async function getPrayerSchedule() {
     prayerScheduleDownloaded = false;
     resetView();
     startFetchingAnimation();
-    rawPrayerSchedule = []; // Clear rawPrayerSchedule array
+    rawPrayerSchedule.length = 0; // Clear rawPrayerSchedule array
     const useLocationID = locationID[selectedLocationIndex];
 
     const now = new Date();
@@ -439,7 +439,7 @@ function retrieveStoredSchedule() {
             getPrayerSchedule();
         }
     } catch {
-        console.log('No stored schedule found. Fetching...');
+        console.log('No valid stored schedule found. Fetching...');
         getPrayerSchedule();
     }
 }
