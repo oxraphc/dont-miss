@@ -59,17 +59,6 @@ input[type='checkbox'] {
 }
 
 
-.logo.dark {
-    filter: invert(1);
-}
-
-
-.logo {
-    height: calc(1rem + 1vw);
-    width: auto;
-}
-
-
 .container-gap {
     gap: 0.5rem;
 }
@@ -239,6 +228,9 @@ input[type='checkbox'] {
 
 
 .no-select {
+    -webkit-user-select: none; /* Safari, Chrome, Opera */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* IE, Edge */
     user-select: none;
 }
 
@@ -286,6 +278,18 @@ input[type='checkbox'] {
     padding: 3px;
     box-sizing: border-box;
     z-index: 2;
+}
+
+
+#logo.dark {
+    filter: invert(1);
+}
+
+
+#logo {
+    pointer-events: none;
+    height: calc(1rem + 1vw);
+    width: auto;
 }
 
 
