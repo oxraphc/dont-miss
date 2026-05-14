@@ -562,7 +562,7 @@ function applyScheduleAdjustment(rawSchedule, adjustment) {
     for (let i = 0; i < rawSchedule.length; i++) {
         const t = rawSchedule[i][1].split(':');
         let prayerTimeInMinutes = timeToMinutes(t[0], t[1]);
-        prayerTimeInMinutes += Number(adjustment); // fixme
+        prayerTimeInMinutes += Number(adjustment);
         prayerSchedule[i] = [rawSchedule[i][0], minutesToTime(prayerTimeInMinutes)];
     }
 }
@@ -572,7 +572,12 @@ function minutesToTime(minutes) {
     const h = Math.floor(minutes / 60);
     const m = minutes % 60;
 
-    return [h, m].join(':');
+    const hm = [
+        h.toString().padStart(2, '0'),
+        m.toString().padStart(2, '0')
+    ];
+
+    return hm.join(':');
 }
 
 
