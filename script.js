@@ -41,15 +41,6 @@ let fetchingAnimation;
 let fetchingAnimationStep = 0;
 const rawPrayerSchedule = [];
 const prayerSchedule = [];
-// Table array, each row goes like: ['<prayer_name>', '<prayer_time>']
-// 0- Isya' (yesterday)
-// 1- Fajr
-// 2- Sunrise
-// 3- Dhuha
-// 4- Dzuhr
-// 5- Ashr
-// 6- Magrhib
-// 7- Isha'
 const locationID = [
     'd6baf65e0b240ce177cf70da146c8dc8', // Tulungagung
     'eda80a3d5b344bc40f3bc04f65b7a357', // Kota Kediri
