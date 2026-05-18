@@ -143,27 +143,6 @@ setInterval(() => {
     }
 }, 1);
 
-// =================================================== TESTING / DEBUG ONLY
-// const now = new Date();
-// now.setHours(11);
-// now.setMinutes(31);
-// now.setSeconds(0);
-// console.log('Debug mode active!')
-// setInterval(() => {
-//     if (savedDate !== now.getDate()) {
-//         savedDate = now.getDate();
-//         getPrayerSchedule();
-//     }
-//     if (prayerScheduleDownloaded) {
-//         updateClock(now);
-//         updatePrayerIndex(now);
-//         updatePrayerTimeDelta(now);
-//         updateView();
-//         now.setSeconds(now.getSeconds() + 1);
-//     }
-// }, 10);
-//  ========================================================================
-
 
 function startFetchingAnimation() {
     fetchingAnimation = setInterval(() => {
