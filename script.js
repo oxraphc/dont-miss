@@ -1,4 +1,5 @@
 import { loadLanguage, language } from './locale.js';
+import { initializeTicker } from './timekeeper.js';
 
 const API_BASE_URL = 'https://api.myquran.com/v3/sholat/jadwal/';
 const TIME_DELTA_THRESHOLD = 30; // Minutes
@@ -127,8 +128,10 @@ async function getPrayerSchedule() {
 
 
 // Global update loop
-setInterval(() => {
-    const now = new Date();
+initializeTicker(tick);
+
+
+function tick(now) {
     updateClock(now);
 
     if (savedDate !== now.getDate()) {
@@ -141,7 +144,7 @@ setInterval(() => {
         updatePrayerTimeDelta(now);
         updateView();
     }
-}, 1);
+}
 
 
 function startFetchingAnimation() {
