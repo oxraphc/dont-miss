@@ -227,7 +227,8 @@ function updatePrayerTimeDelta(now) {
         prayerTimeDelta = prayerTimeInMinutes - currentTimeInMinutes;
     }
 
-    if (prayerTimeDelta <= 30) prayerIndexSkipped = false; // Release prayerIndex update latch
+    updateDeltaTimeThresholdInUse();
+    if (prayerTimeDelta <= deltaTimeThresholdInUse) prayerIndexSkipped = false; // Release prayerIndex update latch
 }
 
 
@@ -235,7 +236,6 @@ function updateView() {
     prayerNameElem.innerText = prayerIndex === 0 ? language.prayerIsha : language[prayerSchedule[prayerIndex][0]];
     prayerTimeElem.innerText = prayerSchedule[prayerIndex][1];
 
-    updateDeltaTimeThresholdInUse();
     progressBarMarkerLabelMin.innerText = `-${deltaTimeThresholdInUse} ${language.progressBarMin}`;
     progressBarMarkerLabelMax.innerText = `+${deltaTimeThresholdInUse} ${language.progressBarMin}`;
 
